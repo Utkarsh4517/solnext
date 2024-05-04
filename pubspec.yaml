@@ -39,6 +39,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   shared_preferences: ^2.2.3
   flutter_riverpod: ^2.5.1
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
