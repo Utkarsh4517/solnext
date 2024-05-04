@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
+import 'package:solnext/core/shared/components/secondary_button.dart';
 import 'package:solnext/core/shared/nav_bar.dart';
 import 'package:solnext/src/onBoarding/ui/intro_page2.dart';
 import 'package:solnext/src/onBoarding/ui/intro_page3.dart';
@@ -50,19 +51,44 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               IntroPage3(),
             ],
           ),
-          if(currentIndex == 0)
-          Positioned(
-            bottom: getScreenheight(context) * 0.05,
-            left: getScreenWidth(context) * 0.05,
-            child: SizedBox(
-              width: getScreenWidth(context) * 0.9,
-              height: getScreenheight(context) * 0.055,
-              child: PrimaryButton(onPressed: () {
-                 _controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
-              }, text: 'Get Started'),
+          if (currentIndex == 0)
+            Positioned(
+              bottom: getScreenheight(context) * 0.05,
+              left: getScreenWidth(context) * 0.05,
+              child: SizedBox(
+                width: getScreenWidth(context) * 0.9,
+                height: getScreenheight(context) * 0.055,
+                child: PrimaryButton(
+                    onPressed: () {
+                      _controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                    },
+                    text: 'Get Started'),
+              ),
             ),
-          ),
-          
+          if (currentIndex == 1)
+            Positioned(
+              bottom: getScreenheight(context) * 0.05,
+              left: getScreenWidth(context) * 0.05,
+              child: SizedBox(
+                width: getScreenWidth(context) * 0.9,
+                height: getScreenheight(context) * 0.055,
+                child: PrimaryButton(
+                    onPressed: () {
+                      // _controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                    },
+                    text: 'Import a wallet'),
+              ),
+            ),
+          if (currentIndex == 1)
+            Positioned(
+              bottom: getScreenheight(context) * 0.12,
+              left: getScreenWidth(context) * 0.05,
+              child: SizedBox(
+                width: getScreenWidth(context) * 0.9,
+                height: getScreenheight(context) * 0.055,
+                child: SecondaryButton(onPressed: () {}, text: 'Create a new wallet'),
+              ),
+            ),
         ],
       ),
     );
