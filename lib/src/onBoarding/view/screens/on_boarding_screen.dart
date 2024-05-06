@@ -1,16 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:google_fonts/google_fonts.dart';
-import 'package:solnext/core/constants/colors.dart';
+import 'package:solana/solana.dart';
+import 'package:solana_web3/solana_web3.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
 import 'package:solnext/core/shared/components/secondary_button.dart';
 import 'package:solnext/core/shared/nav_bar.dart';
-import 'package:solnext/src/onBoarding/ui/intro_page2.dart';
-import 'package:solnext/src/onBoarding/ui/intro_page3.dart';
-import 'package:solnext/src/onBoarding/ui/intro_page1.dart';
+import 'package:solnext/core/utils/print_log.dart';
+import 'package:solnext/src/onBoarding/data/services/create_wallet.dart';
+import 'package:solnext/src/onBoarding/view/screens/intro_page2.dart';
+import 'package:solnext/src/onBoarding/view/screens/intro_page3.dart';
+import 'package:solnext/src/onBoarding/view/screens/intro_page1.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solana_web3/solana_web3.dart' as web3;
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -24,6 +27,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   bool onLastPage = false;
   int currentIndex = 0;
+  final SolanaClient client = SolanaClient(rpcUrl: Uri(), websocketUrl: Uri(), timeout: const Duration(seconds: 30));
 
   void _completeOnboarding() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -86,7 +90,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: SizedBox(
                 width: getScreenWidth(context) * 0.9,
                 height: getScreenheight(context) * 0.055,
-                child: SecondaryButton(onPressed: () {}, text: 'Create a new wallet'),
+                child: SecondaryButton(
+                    onPressed: () async {
+                      final (pubkey, privateKey) = await CreateWallet.createWallet();
+                      PrintLog.printLog(pubkey);
+                      PrintLog.printLog(privateKey);
+                    },
+                    text: 'Create a new wallet'),
               ),
             ),
         ],
