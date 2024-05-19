@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
+import 'package:solnext/src/onBoarding/data/services/on_boarding_service.dart';
 
 class AllDoneScreen extends StatefulWidget {
   const AllDoneScreen({super.key});
@@ -31,7 +32,7 @@ class _AllDoneScreenState extends State<AllDoneScreen> {
             style: GoogleFonts.poppins(color: black2, fontWeight: FontWeight.bold, fontSize: getScreenWidth(context) * 0.09, height: 1),
           ),
         ),
-         Container(
+        Container(
           margin: const EdgeInsets.only(top: 20),
           width: getScreenWidth(context) * 0.65,
           alignment: Alignment.center,
@@ -47,12 +48,7 @@ class _AllDoneScreenState extends State<AllDoneScreen> {
           height: getScreenheight(context) * 0.055,
           child: PrimaryButton(
               onPressed: () {
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => WalletCreatedScreen(keyPair: keyPairGenerated!, mnemonic: mnemonicGenerated!),
-                //   ),
-                // );
+                OnBoardingService.completeOnboarding(context);
               },
               text: 'Continue'),
         ),

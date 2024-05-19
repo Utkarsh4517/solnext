@@ -4,12 +4,10 @@ import 'package:solana/solana.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
 import 'package:solnext/core/shared/components/secondary_button.dart';
-import 'package:solnext/core/shared/nav_bar.dart';
 import 'package:solnext/src/onBoarding/view/screens/intro_page2.dart';
 import 'package:solnext/src/onBoarding/view/screens/intro_page3.dart';
 import 'package:solnext/src/onBoarding/view/screens/intro_page1.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -25,11 +23,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   int currentIndex = 0;
   final SolanaClient client = SolanaClient(rpcUrl: Uri(), websocketUrl: Uri(), timeout: const Duration(seconds: 30));
 
-  void _completeOnboarding() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('hasSeenOnboarding', true);
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const NavigationScreen()));
-  }
+
 
   @override
   Widget build(BuildContext context) {
