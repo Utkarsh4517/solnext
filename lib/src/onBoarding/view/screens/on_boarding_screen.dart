@@ -92,9 +92,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 height: getScreenheight(context) * 0.055,
                 child: SecondaryButton(
                     onPressed: () async {
-                      final (pubkey, privateKey) = await CreateWallet.createWallet();
-                      PrintLog.printLog(pubkey);
-                      PrintLog.printLog(privateKey);
+                        _controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                      // PrintLog.printLog(pubkey);
+                      // PrintLog.printLog(privateKey);
                     },
                     text: 'Create a new wallet'),
               ),

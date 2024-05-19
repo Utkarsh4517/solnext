@@ -1,17 +1,10 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import 'package:solana_web3/solana_web3.dart' as web3;
+import 'package:solana/solana.dart';
+import 'package:bip39/bip39.dart' as bip39;
 
 class CreateWallet {
-  static Future<(String, String)> createWallet() async {
-    // final cluster = web3.Cluster.devnet;
-    // final connection = web3.Connection(cluster);
-    final wallet = web3.Keypair.generateSync();
-
-    String pubkey = wallet.pubkey.toString();
-    Uint8List secretKeyUint8List = Uint8List.fromList(wallet.seckey);
-    String base64EncodedKey = base64Encode(secretKeyUint8List);
-    return (pubkey, base64EncodedKey);
+  static Future<(Ed25519HDKeyPair, String)> createNewWallet() async {
+    final String mnemonic = bip39.generateMnemonic();
+    final Ed25519HDKeyPair keypair = await Ed25519HDKeyPair.fromMnemonic(mnemonic);
+    return (keypair, mnemonic);
   }
 }
