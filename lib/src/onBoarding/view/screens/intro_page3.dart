@@ -5,7 +5,6 @@ import 'package:solana/solana.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
-import 'package:solnext/core/shared/components/secondary_button.dart';
 import 'package:solnext/core/utils/wallet.dart';
 import 'package:solnext/src/onBoarding/data/services/create_wallet.dart';
 import 'package:solnext/src/onBoarding/view/screens/wallet_created_screen.dart';

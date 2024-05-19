@@ -1,19 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:solana/solana.dart';
-import 'package:solana_web3/solana_web3.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
 import 'package:solnext/core/shared/components/secondary_button.dart';
 import 'package:solnext/core/shared/nav_bar.dart';
-import 'package:solnext/core/utils/print_log.dart';
-import 'package:solnext/src/onBoarding/data/services/create_wallet.dart';
 import 'package:solnext/src/onBoarding/view/screens/intro_page2.dart';
 import 'package:solnext/src/onBoarding/view/screens/intro_page3.dart';
 import 'package:solnext/src/onBoarding/view/screens/intro_page1.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solana_web3/solana_web3.dart' as web3;
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});

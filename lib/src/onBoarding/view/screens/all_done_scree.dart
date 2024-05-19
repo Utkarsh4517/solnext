@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
-import 'package:solnext/src/onBoarding/view/screens/wallet_created_screen.dart';
 
 class AllDoneScreen extends StatefulWidget {
   const AllDoneScreen({super.key});
