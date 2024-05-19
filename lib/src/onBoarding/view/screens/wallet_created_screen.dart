@@ -8,6 +8,7 @@ import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
 import 'package:solnext/core/shared/components/secondary_button.dart';
+import 'package:solnext/src/onBoarding/view/screens/all_done_scree.dart';
 
 class WalletCreatedScreen extends StatefulWidget {
   final Ed25519HDKeyPair keyPair;
@@ -78,7 +79,11 @@ class _WalletCreatedScreenState extends State<WalletCreatedScreen> {
         SizedBox(
           width: getScreenWidth(context) * 0.9,
           height: getScreenheight(context) * 0.055,
-          child: PrimaryButton(onPressed: () {}, text: 'I Saved it somewhere'),
+          child: PrimaryButton(
+              onPressed: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AllDoneScreen()));
+              },
+              text: 'I Saved it somewhere'),
         ),
       ],
     ));
