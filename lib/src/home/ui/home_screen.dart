@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
+import 'package:solnext/core/constants/shadows.dart';
 import 'package:solnext/core/shared/components/scan_a_qr_button.dart';
+import 'package:solnext/src/home/widgets/horizontal_token_card.dart';
 import 'package:solnext/src/home/widgets/transaction_buttons.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,9 +17,7 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           actions: [
-            Container(
-              margin: EdgeInsets.only(right: getScreenWidth(context) * 0.05),
-              child: SvgPicture.asset('assets/svgs/settings.svg')),
+            Container(margin: EdgeInsets.only(right: getScreenWidth(context) * 0.05), child: SvgPicture.asset('assets/svgs/settings.svg')),
           ],
         ),
         backgroundColor: Colors.white,
@@ -35,6 +37,10 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+            Positioned(
+              top: getScreenheight(context) * 0.2,
+              child: HorizontalTokenCard(),
             )
           ],
         ));
