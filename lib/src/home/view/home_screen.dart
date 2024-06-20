@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/scan_a_qr_button.dart';
+import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/wallet.dart';
-import 'package:solnext/src/home/widgets/horizontal_token_card.dart';
-import 'package:solnext/src/home/widgets/transaction_buttons.dart';
+import 'package:solnext/src/home/view/widgets/horizontal_token_card.dart';
+import 'package:solnext/src/home/view/widgets/transaction_buttons.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -71,7 +72,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 20,
                       child: CircularProgressIndicator(),
                     );
+                  } else if (snapshot.hasError) {
+                    return Container();
+                  } else if (snapshot.hasData) {
+                    final pubAdd = snapshot.data!;
+                    PrintLog.printLog(pubAdd);
+                    return Text(pubAdd);
                   }
+                  return Container();
                 },
               ),
             )

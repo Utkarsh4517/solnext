@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:solnext/core/constants/dimensions.dart';
-import 'package:solnext/src/home/ui/home_screen.dart';
+import 'package:solnext/src/home/view/home_screen.dart';
 import 'package:solnext/src/nft/ui/nft_screen.dart';
 import 'package:solnext/src/marketplace/ui/marketplace_screen.dart';
 
