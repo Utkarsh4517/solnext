@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:solana/solana.dart';
-import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/solana.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,7 +9,6 @@ class Wallet {
     try {
       final lamports = await client.getBalance(walletAddress);
       final sol = lamports.value / lamportsPerSol;
-      PrintLog.printLog(sol.toString());
       return sol;
     } catch (e) {
       print('Error fetching balance: $e');

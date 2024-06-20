@@ -50,6 +50,7 @@ dependencies:
   bs58: ^1.0.2
   bip39_mnemonic: ^3.0.6
   flutter_launcher_icons: ^0.13.1
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:solnext/core/constants/dimensions.dart';
+import 'package:solnext/core/shared/components/animated_price_text_widget.dart';
+import 'package:solnext/core/shared/components/custom_shimmer_animation.dart';
 import 'package:solnext/core/shared/components/scan_a_qr_button.dart';
-import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/wallet.dart';
 import 'package:solnext/src/home/data/wallet.dart';
 import 'package:solnext/src/home/view/widgets/horizontal_token_card.dart';
@@ -17,21 +20,36 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Future<String>? _currentBalanceInUSDC;
+  Timer? _timer;
+  bool _isFirstLoad = true;
 
   Future<String> fetchBalanceInUSDC() async {
     final pubAdd = await WalletService.getPublicKey();
     final currentBalanceInSol = await Wallet.getBalance(pubAdd);
     final conversionRate = await Wallet.getSolToUsdcConversionRate();
     final currentBalanceInUSDC = currentBalanceInSol * conversionRate;
-    return currentBalanceInUSDC.toString();
+    return currentBalanceInUSDC.toStringAsFixed(2);
   }
 
   @override
   void initState() {
     super.initState();
+    _loadBalance();
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      _loadBalance();
+    });
+  }
+
+  void _loadBalance() {
     setState(() {
       _currentBalanceInUSDC = fetchBalanceInUSDC();
     });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -66,22 +84,26 @@ class _HomeScreenState extends State<HomeScreen> {
               child: HorizontalTokenCard(),
             ),
             Positioned(
-              top: getScreenheight(context) * 0.1,
-              child: FutureBuilder(
+              top: getScreenheight(context) * 0.01,
+              child: FutureBuilder<String>(
                 future: _currentBalanceInUSDC,
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(),
+                  if (snapshot.connectionState == ConnectionState.waiting && _isFirstLoad) {
+                    return SizedBox(
+                      width: getScreenWidth(context),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomShimmerAnimation(),
+                        ],
+                      ),
                     );
                   } else if (snapshot.hasError) {
                     return Container();
                   } else if (snapshot.hasData) {
-                    final pubAdd = snapshot.data!;
-                    PrintLog.printLog(pubAdd);
-                    return Text(pubAdd);
+                    _isFirstLoad = false;
+                    final balanceInUsd = snapshot.data!;
+                    return AnimatedPriceTextWidget(balanceInUsd: balanceInUsd);
                   }
                   return Container();
                 },
