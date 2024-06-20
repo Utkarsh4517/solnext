@@ -22,12 +22,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<String>? _currentBalanceInUSDC;
   Timer? _timer;
   bool _isFirstLoad = true;
+  String _priceInUsd = '';
+  String _priceInSol = '';
 
   Future<String> fetchBalanceInUSDC() async {
     final pubAdd = await WalletService.getPublicKey();
     final currentBalanceInSol = await Wallet.getBalance(pubAdd);
+    setState(() {
+      _priceInSol = currentBalanceInSol.toString();
+    });
     final conversionRate = await Wallet.getSolToUsdcConversionRate();
     final currentBalanceInUSDC = currentBalanceInSol * conversionRate;
+    setState(() {
+      _priceInUsd = currentBalanceInUSDC.toStringAsFixed(2);
+    });
     return currentBalanceInUSDC.toStringAsFixed(2);
   }
 
@@ -81,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Positioned(
               top: getScreenheight(context) * 0.2,
-              child: HorizontalTokenCard(),
+              child: HorizontalTokenCard(priceInUsd: _priceInUsd, priceInSol: _priceInSol),
             ),
             Positioned(
               top: getScreenheight(context) * 0.01,

@@ -5,11 +5,10 @@ import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/constants/shadows.dart';
 
-
 class HorizontalTokenCard extends StatelessWidget {
-  const HorizontalTokenCard({
-    super.key,
-  });
+  final String priceInSol;
+  final String priceInUsd;
+  const HorizontalTokenCard({super.key, required this.priceInSol, required this.priceInUsd});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class HorizontalTokenCard extends StatelessWidget {
         horizontal: getScreenWidth(context) * 0.03,
         vertical: getScreenWidth(context) * 0.03,
       ),
-      width: getScreenWidth(context)  * 0.94,
+      width: getScreenWidth(context) * 0.94,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: boxShadow,
@@ -39,7 +38,7 @@ class HorizontalTokenCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Solana', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)),
-                      Text('0 SOL', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: black2))
+                      Text('$priceInSol SOL', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: black2))
                     ],
                   )
                 ],
@@ -49,10 +48,7 @@ class HorizontalTokenCard extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text('\$137.22', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)),
-              Text('\$4.44', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: green))
-            ],
+            children: [Text('\$$priceInUsd', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)), Text('\$4.44', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: green))],
           )
         ],
       ),
