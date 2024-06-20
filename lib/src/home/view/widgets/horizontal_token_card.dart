@@ -8,7 +8,8 @@ import 'package:solnext/core/constants/shadows.dart';
 class HorizontalTokenCard extends StatelessWidget {
   final String priceInSol;
   final String priceInUsd;
-  const HorizontalTokenCard({super.key, required this.priceInSol, required this.priceInUsd});
+  final String changeInPriceInUsd;
+  const HorizontalTokenCard({super.key, required this.priceInSol, required this.priceInUsd, required this.changeInPriceInUsd});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,17 @@ class HorizontalTokenCard extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: [Text('\$$priceInUsd', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)), Text('\$4.44', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: green))],
+            children: [
+              Text('\$$priceInUsd', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)),
+              
+                Text(
+                  '${double.parse(changeInPriceInUsd) < 0 ? "-\$${(double.parse(changeInPriceInUsd) * -1)}" : "+\$${changeInPriceInUsd}"}',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    color: double.parse(changeInPriceInUsd) > 0 ? green : red,
+                  ),
+                )
+            ],
           )
         ],
       ),

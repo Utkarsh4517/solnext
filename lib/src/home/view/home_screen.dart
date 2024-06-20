@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Positioned(
             top: getScreenheight(context) * 0.2,
-            child: HorizontalTokenCard(priceInUsd: _priceInUsd, priceInSol: _priceInSol),
+            child: HorizontalTokenCard(priceInUsd: _priceInUsd, priceInSol: _priceInSol, changeInPriceInUsd: _profitOrLoss),
           ),
           Positioned(
             top: getScreenheight(context) * 0.01,
