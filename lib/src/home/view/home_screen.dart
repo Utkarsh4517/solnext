@@ -4,6 +4,7 @@ import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/scan_a_qr_button.dart';
 import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/wallet.dart';
+import 'package:solnext/src/home/data/wallet.dart';
 import 'package:solnext/src/home/view/widgets/horizontal_token_card.dart';
 import 'package:solnext/src/home/view/widgets/transaction_buttons.dart';
 
@@ -15,18 +16,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<String>? _walletPublicAddress;
+  Future<String>? _currentBalanceInUSDC;
 
-  Future<String> getWalletAddress() async {
+  Future<String> fetchBalanceInUSDC() async {
     final pubAdd = await WalletService.getPublicKey();
-    return pubAdd;
+    final currentBalanceInSol = await Wallet.getBalance(pubAdd);
+    final conversionRate = await Wallet.getSolToUsdcConversionRate();
+    final currentBalanceInUSDC = currentBalanceInSol * conversionRate;
+    return currentBalanceInUSDC.toString();
   }
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      _walletPublicAddress = getWalletAddress();
+      _currentBalanceInUSDC = fetchBalanceInUSDC();
     });
   }
 
@@ -64,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Positioned(
               top: getScreenheight(context) * 0.1,
               child: FutureBuilder(
-                future: _walletPublicAddress,
+                future: _currentBalanceInUSDC,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Container(
