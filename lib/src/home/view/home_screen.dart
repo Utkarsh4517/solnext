@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solana/dto.dart';
+import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/models/transaction.dart';
 import 'package:solnext/core/shared/components/animated_price_text_widget.dart';
@@ -177,7 +179,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   _isFirstLoad = false;
                   final balanceInUsd = snapshot.data!;
                   return Column(
-                    children: [AnimatedPriceTextWidget(balanceInUsd: balanceInUsd), Text(_profitOrLoss), Text(_profitOrLossPercentage)],
+                    children: [
+                      AnimatedPriceTextWidget(balanceInUsd: balanceInUsd),
+                      Row(
+                        children: [
+                          Text(
+                            '${double.parse(_profitOrLoss) < 0 ? "-\$${(double.parse(_profitOrLoss) * -1)}" : "+\$${_profitOrLoss}"}',
+                            style: GoogleFonts.poppins(fontWeight: FontWeight.w700, color: double.parse(_profitOrLoss) > 0 ? green : red, fontSize: getScreenWidth(context) * 0.06),
+                          ),
+                          SizedBox(width: getScreenWidth(context) * 0.03),
+                          Container(
+                            padding: EdgeInsets.all(getScreenWidth(context) * 0.025),
+                            decoration: BoxDecoration(
+                              color: double.parse(_profitOrLossPercentage) >0 ? greenAccent : redAccent,
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Text(
+                             '${double.parse(_profitOrLossPercentage) < 0 ? "${(double.parse(_profitOrLossPercentage) * -1)}%" : "${_profitOrLossPercentage}%"}',
+                              style: GoogleFonts.poppins(fontWeight: FontWeight.w700, color: double.parse(_profitOrLossPercentage) > 0 ? green : red, fontSize: getScreenWidth(context) * 0.03),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   );
                 }
                 return Container();
