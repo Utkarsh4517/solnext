@@ -7,6 +7,7 @@ import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/models/transaction.dart';
 import 'package:solnext/core/shared/components/animated_price_text_widget.dart';
 import 'package:solnext/core/shared/components/custom_shimmer_animation.dart';
+import 'package:solnext/core/shared/components/receive_sheet.dart';
 import 'package:solnext/core/shared/components/swap_button.dart';
 import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/transaction_details.dart';
@@ -30,9 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
   String _priceInSol = '';
   String _profitOrLoss = '';
   String _profitOrLossPercentage = '';
+  String _publicAddress = '';
 
   Future<String> fetchBalanceInUSDC() async {
     final pubAdd = await WalletService.getPublicKey();
+    setState(() {
+      _publicAddress = pubAdd;
+    });
     final currentBalanceInSol = await Wallet.getBalance(pubAdd);
     final previousBalanceInSol = await TransactionManager.getPreviousBalance();
     // Check for new deposits
@@ -122,6 +127,20 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  showReceiveSheet(BuildContext context, String address) {
+    return showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (context) {
+        return ReceiveSheet(address: address);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,7 +166,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TransactionButtons(file: 'receive_solnext', function: () {}, text: 'Receive'),
+                  TransactionButtons(
+                      file: 'receive_solnext',
+                      function: () {
+                        showReceiveSheet(context, _publicAddress);
+                      },
+                      text: 'Receive'),
                   TransactionButtons(file: 'send_solnext', function: () {}, text: 'Send'),
                   TransactionButtons(file: 'buy_solnext', function: () {}, text: 'Buy'),
                 ],

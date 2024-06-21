@@ -51,6 +51,7 @@ dependencies:
   bip39_mnemonic: ^3.0.6
   flutter_launcher_icons: ^0.13.1
   shimmer: ^3.0.0
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:
