@@ -7,6 +7,7 @@ import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/models/transaction.dart';
 import 'package:solnext/core/shared/components/animated_price_text_widget.dart';
 import 'package:solnext/core/shared/components/custom_shimmer_animation.dart';
+import 'package:solnext/core/shared/components/swap_button.dart';
 import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/transaction_details.dart';
 import 'package:solnext/core/utils/wallet.dart';
@@ -178,6 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _isFirstLoad = false;
                   final balanceInUsd = snapshot.data!;
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       AnimatedPriceTextWidget(balanceInUsd: balanceInUsd),
                       Row(
@@ -189,17 +191,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: getScreenWidth(context) * 0.03),
                           Container(
                             padding: EdgeInsets.all(getScreenWidth(context) * 0.025),
-                            decoration: BoxDecoration(
-                              color: double.parse(_profitOrLossPercentage) >0 ? greenAccent : redAccent,
-                              borderRadius: BorderRadius.circular(10)
-                            ),
+                            decoration: BoxDecoration(color: double.parse(_profitOrLossPercentage) > 0 ? greenAccent : redAccent, borderRadius: BorderRadius.circular(10)),
                             child: Text(
-                             '${double.parse(_profitOrLossPercentage) < 0 ? "${(double.parse(_profitOrLossPercentage) * -1)}%" : "${_profitOrLossPercentage}%"}',
+                              '${double.parse(_profitOrLossPercentage) < 0 ? "${(double.parse(_profitOrLossPercentage) * -1)}%" : "${_profitOrLossPercentage}%"}',
                               style: GoogleFonts.poppins(fontWeight: FontWeight.w700, color: double.parse(_profitOrLossPercentage) > 0 ? green : red, fontSize: getScreenWidth(context) * 0.03),
                             ),
                           ),
                         ],
                       ),
+                      Container(
+                        margin: EdgeInsets.only(left: getScreenWidth(context) * 0.3, top: getScreenheight(context) * 0.01),
+                        alignment: Alignment.center,
+                        child: SwapButton(),
+                      )
                     ],
                   );
                 }

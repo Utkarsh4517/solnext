@@ -30,6 +30,11 @@ class _TransactionButtonsState extends State<TransactionButtons> {
         });
         widget.function();
       },
+      onTapCancel: () {
+        setState(() {
+          factor = 0.2;
+        });
+      },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 200),
         width: getScreenWidth(context) * factor,
