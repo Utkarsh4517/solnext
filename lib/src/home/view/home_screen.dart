@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            top: getScreenheight(context) * 0.2,
+            top: getScreenheight(context) * 0.22,
             child: HorizontalTokenCard(priceInUsd: _priceInUsd, priceInSol: _priceInSol, changeInPriceInUsd: _profitOrLoss),
           ),
           Positioned(
@@ -190,7 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           SizedBox(width: getScreenWidth(context) * 0.03),
                           Container(
-                            padding: EdgeInsets.all(getScreenWidth(context) * 0.025),
+                            alignment: Alignment.center,
+                            width: getScreenWidth(context) * 0.16,
+                            padding: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.02),
                             decoration: BoxDecoration(color: double.parse(_profitOrLossPercentage) > 0 ? greenAccent : redAccent, borderRadius: BorderRadius.circular(10)),
                             child: Text(
                               '${double.parse(_profitOrLossPercentage) < 0 ? "${(double.parse(_profitOrLossPercentage) * -1)}%" : "${_profitOrLossPercentage}%"}',

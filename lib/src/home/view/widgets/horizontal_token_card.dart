@@ -16,14 +16,14 @@ class HorizontalTokenCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(getScreenWidth(context) * 0.03),
       margin: EdgeInsets.symmetric(
-        horizontal: getScreenWidth(context) * 0.03,
+        horizontal: getScreenWidth(context) * 0.04,
         vertical: getScreenWidth(context) * 0.03,
       ),
-      width: getScreenWidth(context) * 0.94,
+      width: getScreenWidth(context) * 0.92,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: boxShadow,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -41,12 +41,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
       body: _pages[_selectedTab],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(12),
           boxShadow: boxShadow,
         ),
         margin: EdgeInsets.all(getScreenWidth(context) * 0.05),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(12),
           child: BottomNavigationBar(
             showSelectedLabels: false,
             showUnselectedLabels: false,
