@@ -15,16 +15,34 @@ class TransactionButtons extends StatefulWidget {
 }
 
 class _TransactionButtonsState extends State<TransactionButtons> {
+  double factor = 0.2;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: getScreenWidth(context) * 0.235,
-      height: getScreenWidth(context) * 0.235,
-      decoration: BoxDecoration(color: Colors.white, boxShadow: boxShadow, borderRadius: BorderRadius.circular(12)),
-      padding: EdgeInsets.all(getScreenWidth(context) * 0.03),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [SvgPicture.asset("assets/svgs/${widget.file}.svg"), Text(widget.text, style: GoogleFonts.poppins(fontWeight: FontWeight.w500))],
+    return GestureDetector(
+      onTapDown: (details) {
+        setState(() {
+          factor = 0.18;
+        });
+      },
+      onTapUp: (details) {
+        setState(() {
+          factor = 0.2;
+        });
+        widget.function();
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        width: getScreenWidth(context) * factor,
+        height: getScreenWidth(context) * factor,
+        decoration: BoxDecoration(color: Colors.white, boxShadow: boxShadow, borderRadius: BorderRadius.circular(12)),
+        padding: EdgeInsets.all(getScreenWidth(context) * 0.025),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SvgPicture.asset("assets/svgs/${widget.file}.svg", width: 25, height: 25),
+            Text(widget.text, style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: getScreenWidth(context) * 0.032)),
+          ],
+        ),
       ),
     );
   }

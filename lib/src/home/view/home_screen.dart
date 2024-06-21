@@ -2,14 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solana/dto.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/models/transaction.dart';
 import 'package:solnext/core/shared/components/animated_price_text_widget.dart';
 import 'package:solnext/core/shared/components/custom_shimmer_animation.dart';
-import 'package:solnext/core/shared/components/scan_a_qr_button.dart';
 import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/transaction_details.dart';
 import 'package:solnext/core/utils/wallet.dart';
@@ -137,15 +134,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       backgroundColor: Colors.white,
-      floatingActionButton: ScanAQrButton(),
+      // floatingActionButton: ScanAQrButton(),
       body: Stack(
         children: [
           Positioned(
-            bottom: getScreenheight(context) * 0.1,
+            bottom: getScreenheight(context) * 0.02,
+            left: getScreenWidth(context) * 0.05,
             child: Container(
-              width: getScreenWidth(context),
+              width: getScreenWidth(context) * 0.9,
+              alignment: Alignment.center,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TransactionButtons(file: 'receive_solnext', function: () {}, text: 'Receive'),
                   TransactionButtons(file: 'send_solnext', function: () {}, text: 'Send'),
