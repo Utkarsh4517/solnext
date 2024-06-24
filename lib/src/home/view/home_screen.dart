@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _profitOrLossUsdcPercentage = '';
   String _publicAddress = '';
 
-  Future<String> fetchBalanceInUSDC() async {
+  Future<String> fetchBalance() async {
     final pubAdd = await WalletService.getPublicKey();
     PrintLog.printLog(pubAdd);
     final usdcMintAddress = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
@@ -49,13 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     /// FOR SOL
-    final currentBalanceInSol = await Wallet.getBalance(pubAdd);
+    final currentBalanceInSol = await WalletHandler.getBalance(pubAdd);
     final previousBalanceInSol = await TransactionManager.getSOLPreviousBalance();
     // Check for new SOL deposits
     if (currentBalanceInSol > previousBalanceInSol) {
       final newDeposit = currentBalanceInSol - previousBalanceInSol;
       // Fetch the current price of SOL
-      final currentPriceSolToUsd = await Wallet.getSolToUsdcConversionRate();
+      final currentPriceSolToUsd = await WalletHandler.getSolToUsdcConversionRate();
       final newTransaction = TransactionDtoSol(amount: newDeposit, price: currentPriceSolToUsd);
       await TransactionManager.saveSolTransaction(newTransaction);
       await TransactionManager.saveSOLPreviousBalance(currentBalanceInSol);
@@ -63,20 +63,20 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _priceInSol = currentBalanceInSol.toString();
     });
-    final conversionRateSolToUsd = await Wallet.getSolToUsdcConversionRate();
+    final conversionRateSolToUsd = await WalletHandler.getSolToUsdcConversionRate();
     final currentBalanceOfSolInUSD = currentBalanceInSol * conversionRateSolToUsd;
     setState(() {
       _priceOfSolInUsd = currentBalanceOfSolInUSD.toStringAsFixed(2);
     });
 
     /// FOR USDC
-    final currentBalanceInUsdc = await Wallet.getTokenBalance(pubAdd, usdcMintAddress);
+    final currentBalanceInUsdc = await WalletHandler.getTokenBalance(pubAdd, usdcMintAddress);
     PrintLog.printLog('current balance in usdc $currentBalanceInUsdc');
     final previousBalanceInUsdc = await TransactionManager.getUSDCPreviousBalance();
     // check for new USDC deposits
     if (currentBalanceInUsdc > previousBalanceInUsdc) {
       final newDeposit = currentBalanceInUsdc - previousBalanceInUsdc;
-      final currentPriceUsdcToUsd = await Wallet.getUsdcToUsdConversionRate();
+      final currentPriceUsdcToUsd = await WalletHandler.getUsdcToUsdConversionRate();
       final newTransaction = TransactionDtoUsdc(amount: newDeposit, price: currentPriceUsdcToUsd);
       await TransactionManager.saveUsdcTransaction(newTransaction);
       await TransactionManager.saveUSDCPreviousBalance(currentBalanceInUsdc);
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _priceInUsdc = currentBalanceInUsdc.toString();
     });
-    final conversionRateUsdcToUsd = await Wallet.getUsdcToUsdConversionRate();
+    final conversionRateUsdcToUsd = await WalletHandler.getUsdcToUsdConversionRate();
     final currentBalanceOfUsdcInUsd = currentBalanceInUsdc * conversionRateUsdcToUsd;
     setState(() {
       _priceOfUsdcinUsd = currentBalanceOfUsdcInUsd.toStringAsFixed(2);
@@ -101,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Fetch the transaction history for SOL
     final solTransactions = await TransactionManager.getSolTransactions();
+    final solOutgoingTransactions = await TransactionManager.getSolOutgoingTransactions();
     // Process each transaction to calculate the total investment, total SOL bought, and total SOL sold
     for (var transaction in solTransactions) {
       if (transaction.amount > 0) {
@@ -108,16 +109,18 @@ class _HomeScreenState extends State<HomeScreen> {
         totalInvestment += transaction.amount * transaction.price;
         totalInvestmentSol += transaction.amount * transaction.price;
         totalSolBought += transaction.amount;
-      } else {
-        // Sell transaction
-        totalSolSold += transaction.amount.abs();
-        totalInvestment -= transaction.amount.abs() * transaction.price;
-        totalInvestmentSol -= transaction.amount.abs() * transaction.price;
       }
+    }
+    for (var transaction in solOutgoingTransactions) {
+      // Sell transaction
+      totalSolSold += transaction.amount.abs();
+      totalInvestment -= transaction.amount.abs() * transaction.price;
+      totalInvestmentSol -= transaction.amount.abs() * transaction.price;
     }
 
     // fetch the transaction history for USDC
     final usdcTransactions = await TransactionManager.getUsdcTransactions();
+    final usdcOutgoingTransactions = await TransactionManager.getUsdcOutgoingTransactions();
     // Process each transaction to calculate the total investment, total USDC bought, and total USDC sold
     for (var transaction in usdcTransactions) {
       if (transaction.amount > 0) {
@@ -125,12 +128,13 @@ class _HomeScreenState extends State<HomeScreen> {
         totalInvestment += transaction.amount * transaction.price;
         totalInvestementUsdc += transaction.amount * transaction.price;
         totalUsdcBought += transaction.amount;
-      } else {
-        // Sell transaction
-        totalInvestment -= transaction.amount.abs() * transaction.price;
-        totalInvestementUsdc -= transaction.amount.abs() * transaction.price;
-        totalUsdcSold += transaction.amount.abs();
       }
+    }
+    for (var transaction in usdcOutgoingTransactions) {
+      // Sell transaction
+      totalUsdcSold += transaction.amount.abs();
+      totalInvestment -= transaction.amount.abs() * transaction.price;
+      totalInvestementUsdc -= transaction.amount.abs() * transaction.price;
     }
 
     // Calculate net holdings and the current value
@@ -158,8 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _profitOrLossSolPercentage = profitOrLossSolPercentage.toStringAsFixed(2);
     });
 
-    PrintLog.printLog(_profitOrLoss);
-
     // Return the current value of the investment in USD
     return currentValue.toStringAsFixed(2);
   }
@@ -175,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _loadBalance() {
     setState(() {
-      _currentBalanceInUSDC = fetchBalanceInUSDC();
+      _currentBalanceInUSDC = fetchBalance();
     });
   }
 
@@ -233,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   TransactionButtons(
                       file: 'send_solnext',
                       function: () async {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SendMoneySheet()));
+                        // Navigator.push(context, MaterialPageRoute(builder: (context) => SendMoneySheet()));
                       },
                       text: 'Send'),
                   TransactionButtons(file: 'buy_solnext', function: () {}, text: 'Buy'),

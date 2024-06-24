@@ -6,7 +6,7 @@ import 'package:solana/solana.dart';
 import 'package:solnext/core/utils/solana.dart';
 import 'package:http/http.dart' as http;
 
-class Wallet {
+class WalletHandler {
   static Future<double> getBalance(String walletAddress) async {
     try {
       final lamports = await client.getBalance(walletAddress);

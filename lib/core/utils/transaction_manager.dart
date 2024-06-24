@@ -5,6 +5,7 @@ import 'package:solana/solana.dart';
 import 'package:solnext/core/models/transactionDTO.dart';
 import 'package:solnext/core/utils/solana.dart';
 import 'package:solnext/core/utils/wallet_service.dart';
+import 'package:solnext/src/home/data/wallet.dart';
 
 class TransactionManager {
   static Future<void> saveSolTransaction(TransactionDtoSol transaction) async {
@@ -53,6 +54,32 @@ class TransactionManager {
     return prefs.getDouble('previousBalanceUSDC') ?? 0.0;
   }
 
+  static Future<void> saveSolOutgoingTransaction(TransactionDtoSol transaction) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> transactions = prefs.getStringList('transactions_sol_outgoing') ?? [];
+    transactions.add(jsonEncode(transaction.toJson()));
+    await prefs.setStringList('transactions_sol_outgoing', transactions);
+  }
+
+  static Future<List<TransactionDtoSol>> getSolOutgoingTransactions() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> transactions = prefs.getStringList('transactions_sol_outgoing') ?? [];
+    return transactions.map((t) => TransactionDtoSol.fromJson(jsonDecode(t))).toList();
+  }
+
+  static Future<void> saveUsdcOutgoingTransaction(TransactionDtoUsdc transaction) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> transactions = prefs.getStringList('transactions_usdc_outgoing') ?? [];
+    transactions.add(jsonEncode(transaction.toJson()));
+    await prefs.setStringList('transactions_usdc_outgoing', transactions);
+  }
+
+  static Future<List<TransactionDtoUsdc>> getUsdcOutgoingTransactions() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> transactions = prefs.getStringList('transactions_usdc_outgoing') ?? [];
+    return transactions.map((t) => TransactionDtoUsdc.fromJson(jsonDecode(t))).toList();
+  }
+
   static Future<void> sendSol({required String receiverAddress, required double amountInSol}) async {
     final lamports = (amountInSol * 1e9).toInt();
     final senderPrivateMnemonics = await WalletService.getMnemonics();
@@ -73,6 +100,11 @@ class TransactionManager {
         [senderKeypair],
       );
       print('Transaction sent! Signature: $signature');
+
+      // Save the outgoing transaction
+      final currentPriceSolToUsd = await WalletHandler.getSolToUsdcConversionRate();
+      final outgoingTransaction = TransactionDtoSol(amount: -amountInSol, price: currentPriceSolToUsd);
+      await saveSolOutgoingTransaction(outgoingTransaction);
     } catch (e) {
       print('Error sending SOL: $e');
     }
