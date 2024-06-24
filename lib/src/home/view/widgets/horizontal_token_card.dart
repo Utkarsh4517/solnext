@@ -9,7 +9,18 @@ class HorizontalTokenCard extends StatelessWidget {
   final String priceInSol;
   final String priceInUsd;
   final String changeInPriceInUsd;
-  const HorizontalTokenCard({super.key, required this.priceInSol, required this.priceInUsd, required this.changeInPriceInUsd});
+  final String tokenName;
+  final String tokenCurrencyName;
+  final String imgPath;
+  const HorizontalTokenCard({
+    super.key,
+    required this.priceInSol,
+    required this.priceInUsd,
+    required this.changeInPriceInUsd,
+    required this.tokenName,
+    required this.tokenCurrencyName,
+    required this.imgPath,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +43,14 @@ class HorizontalTokenCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  SvgPicture.asset('assets/svgs/solana.svg'),
+                  SvgPicture.asset('assets/svgs/$imgPath.svg'),
                   SizedBox(width: 10),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Solana', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)),
-                      Text('$priceInSol SOL', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: black2))
+                      Text('$tokenCurrencyName', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)),
+                      Text('$priceInSol $tokenName', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: black2))
                     ],
                   )
                 ],
@@ -51,14 +62,13 @@ class HorizontalTokenCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text('\$$priceInUsd', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)),
-              
-                Text(
-                  '${double.parse(changeInPriceInUsd) < 0 ? "-\$${(double.parse(changeInPriceInUsd) * -1)}" : "+\$${changeInPriceInUsd}"}',
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w500,
-                    color: double.parse(changeInPriceInUsd) > 0 ? green : red,
-                  ),
-                )
+              Text(
+                '${double.parse(changeInPriceInUsd) < 0 ? "-\$${(double.parse(changeInPriceInUsd) * -1)}" : "+\$${changeInPriceInUsd}"}',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w500,
+                  color: double.parse(changeInPriceInUsd) > 0 ? green : red,
+                ),
+              )
             ],
           )
         ],

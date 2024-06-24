@@ -223,11 +223,25 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Positioned(
             top: getScreenheight(context) * 0.22,
-            child: HorizontalTokenCard(priceInUsd: _priceOfSolInUsd, priceInSol: _priceInSol, changeInPriceInUsd: _profitOrLoss),
+            child: HorizontalTokenCard(
+              priceInUsd: _priceOfSolInUsd,
+              priceInSol: _priceInSol,
+              changeInPriceInUsd: _profitOrLoss,
+              tokenName: 'SOL',
+              tokenCurrencyName: 'Solana',
+              imgPath: 'SOLANA',
+            ),
           ),
           Positioned(
-            top: getScreenheight(context) * 0.28,
-            child: HorizontalTokenCard(priceInUsd: _priceOfUsdcinUsd, priceInSol: _priceInUsdc, changeInPriceInUsd: _profitOrLoss),
+            top: getScreenheight(context) * 0.34,
+            child: HorizontalTokenCard(
+              priceInUsd: _priceOfUsdcinUsd,
+              priceInSol: _priceInUsdc,
+              changeInPriceInUsd: _profitOrLoss,
+              tokenName: 'USDC',
+              tokenCurrencyName: 'USD Coin',
+              imgPath: 'usdCoin',
+            ),
           ),
           Positioned(
             top: getScreenheight(context) * 0.01,

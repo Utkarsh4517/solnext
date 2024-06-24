@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:solana/dto.dart';
 import 'package:solana/solana.dart';
-import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/solana.dart';
 import 'package:http/http.dart' as http;
 
