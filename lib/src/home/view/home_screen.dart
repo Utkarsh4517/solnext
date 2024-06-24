@@ -34,6 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
   String _priceOfUsdcinUsd = '';
   String _profitOrLoss = '';
   String _profitOrLossPercentage = '';
+  String _profitOrLossSol = '';
+  String _profitOrLossUsdc = '';
+  String _profitOrLossSolPercentage = '';
+  String _profitOrLossUsdcPercentage = '';
   String _publicAddress = '';
 
   Future<String> fetchBalanceInUSDC() async {
@@ -88,6 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     double totalInvestment = 0.0; // total investment in SOL + USDC
+    double totalInvestmentSol = 0.0;
+    double totalInvestementUsdc = 0.0;
     double totalSolBought = 0.0;
     double totalSolSold = 0.0;
     double totalUsdcBought = 0.0;
@@ -100,11 +106,13 @@ class _HomeScreenState extends State<HomeScreen> {
       if (transaction.amount > 0) {
         // Buy transaction
         totalInvestment += transaction.amount * transaction.price;
+        totalInvestmentSol += transaction.amount * transaction.price;
         totalSolBought += transaction.amount;
       } else {
         // Sell transaction
         totalSolSold += transaction.amount.abs();
         totalInvestment -= transaction.amount.abs() * transaction.price;
+        totalInvestmentSol -= transaction.amount.abs() * transaction.price;
       }
     }
 
@@ -115,10 +123,12 @@ class _HomeScreenState extends State<HomeScreen> {
       if (transaction.amount > 0) {
         // Buy transaction
         totalInvestment += transaction.amount * transaction.price;
+        totalInvestementUsdc += transaction.amount * transaction.price;
         totalUsdcBought += transaction.amount;
       } else {
         // Sell transaction
         totalInvestment -= transaction.amount.abs() * transaction.price;
+        totalInvestementUsdc -= transaction.amount.abs() * transaction.price;
         totalUsdcSold += transaction.amount.abs();
       }
     }
@@ -126,16 +136,26 @@ class _HomeScreenState extends State<HomeScreen> {
     // Calculate net holdings and the current value
     final netSolHoldings = totalSolBought - totalSolSold;
     final netUsdcHoldings = totalUsdcBought - totalUsdcSold;
-    final currentValue = (netSolHoldings * conversionRateSolToUsd) + (netUsdcHoldings * conversionRateUsdcToUsd);
+    final currentValueSol = netSolHoldings * conversionRateSolToUsd;
+    final currentValueUsdc = netUsdcHoldings * conversionRateUsdcToUsd;
+    final currentValue = currentValueSol + currentValueUsdc;
 
     // Calculate profit or loss and the percentage
     final profitOrLoss = currentValue - totalInvestment;
+    final profitOrLossSol = currentValueSol - totalInvestmentSol;
+    final profitOrLossSolPercentage = (totalInvestmentSol != 0) ? (profitOrLossSol / totalInvestmentSol) * 100 : 0.0;
+    final profitOrLossUsdc = currentValueUsdc - totalInvestementUsdc;
+    final profitOrLossUsdcPercentage = (totalInvestementUsdc != 0) ? (profitOrLossUsdc / totalInvestementUsdc) * 100 : 0.0;
     final profitOrLossPercentage = (totalInvestment != 0) ? (profitOrLoss / totalInvestment) * 100 : 0.0;
 
     // Update the profit or loss states (if required)
     setState(() {
       _profitOrLoss = profitOrLoss.toStringAsFixed(2);
       _profitOrLossPercentage = profitOrLossPercentage.toStringAsFixed(2);
+      _profitOrLossSol = profitOrLossSol.toStringAsFixed(2);
+      _profitOrLossUsdc = profitOrLossUsdc.toStringAsFixed(2);
+      _profitOrLossUsdcPercentage = profitOrLossUsdcPercentage.toStringAsExponential(2);
+      _profitOrLossSolPercentage = profitOrLossSolPercentage.toStringAsFixed(2);
     });
 
     PrintLog.printLog(_profitOrLoss);
@@ -225,8 +245,8 @@ class _HomeScreenState extends State<HomeScreen> {
             top: getScreenheight(context) * 0.22,
             child: HorizontalTokenCard(
               priceInUsd: _priceOfSolInUsd,
-              priceInSol: _priceInSol,
-              changeInPriceInUsd: _profitOrLoss,
+              price: _priceInSol,
+              changeInPriceInUsd: _profitOrLossSol,
               tokenName: 'SOL',
               tokenCurrencyName: 'Solana',
               imgPath: 'SOLANA',
@@ -236,8 +256,8 @@ class _HomeScreenState extends State<HomeScreen> {
             top: getScreenheight(context) * 0.34,
             child: HorizontalTokenCard(
               priceInUsd: _priceOfUsdcinUsd,
-              priceInSol: _priceInUsdc,
-              changeInPriceInUsd: _profitOrLoss,
+              price: _priceInUsdc,
+              changeInPriceInUsd: _profitOrLossUsdc,
               tokenName: 'USDC',
               tokenCurrencyName: 'USD Coin',
               imgPath: 'usdCoin',

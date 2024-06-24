@@ -6,7 +6,7 @@ import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/constants/shadows.dart';
 
 class HorizontalTokenCard extends StatelessWidget {
-  final String priceInSol;
+  final String price;
   final String priceInUsd;
   final String changeInPriceInUsd;
   final String tokenName;
@@ -14,7 +14,7 @@ class HorizontalTokenCard extends StatelessWidget {
   final String imgPath;
   const HorizontalTokenCard({
     super.key,
-    required this.priceInSol,
+    required this.price,
     required this.priceInUsd,
     required this.changeInPriceInUsd,
     required this.tokenName,
@@ -50,7 +50,7 @@ class HorizontalTokenCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('$tokenCurrencyName', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)),
-                      Text('$priceInSol $tokenName', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: black2))
+                      Text('$price $tokenName', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: black2))
                     ],
                   )
                 ],
