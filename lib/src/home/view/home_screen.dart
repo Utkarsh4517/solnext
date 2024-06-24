@@ -232,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: 'Receive'),
                   TransactionButtons(
                       file: 'send_solnext',
-                      function: () {
+                      function: () async {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => SendMoneySheet()));
                       },
                       text: 'Send'),
