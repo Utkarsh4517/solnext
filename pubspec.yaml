@@ -54,6 +54,7 @@ dependencies:
   qr_flutter: ^4.1.0
   flutter_secure_storage: ^9.2.2
   modular_ui: ^0.0.5
+  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:
