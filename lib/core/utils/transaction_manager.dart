@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solana/dto.dart';
 import 'package:solana/solana.dart';
+import 'package:solana/solana_pay.dart';
 import 'package:solnext/core/models/transactionDTO.dart';
 import 'package:solnext/core/utils/solana.dart';
 import 'package:solnext/core/utils/wallet_service.dart';
@@ -95,7 +97,7 @@ class TransactionManager {
         ],
         //
       );
-      final signature = await client.signAndSendTransaction(
+      final signature = await rpcClient.signAndSendTransaction(
         transaction,
         [senderKeypair],
       );
@@ -107,6 +109,61 @@ class TransactionManager {
       await saveSolOutgoingTransaction(outgoingTransaction);
     } catch (e) {
       print('Error sending SOL: $e');
+    }
+  }
+
+  static Future<void> sendUsdc({required String receiverAddress, required double amountInUsdc}) async {
+    final usdcMintAddress = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
+    final usdcDecimals = 6; // USDC has 6 decimal places
+    final usdcAmount = (amountInUsdc * pow(10, usdcDecimals)).toInt();
+
+    final senderPrivateMnemonics = await WalletService.getMnemonics();
+    final senderKeypair = await Ed25519HDKeyPair.fromMnemonic(senderPrivateMnemonics);
+
+    try {
+      final usdcMint = Ed25519HDPublicKey.fromBase58(usdcMintAddress);
+      final receiverPublicKey = Ed25519HDPublicKey.fromBase58(receiverAddress);
+
+      // Get the sender's USDC token account
+      final senderUsdcAccount = await solclient.getAssociatedTokenAccount(
+        owner: senderKeypair.publicKey,
+        mint: usdcMint,
+      );
+
+      // Get or create the receiver's USDC token account
+      final receiverUsdcAccount = await solclient.getAssociatedTokenAccount(
+        owner: receiverPublicKey,
+        mint: usdcMint,
+      );
+
+      final instructions = <Instruction>[];
+
+      // If receiver's USDC account doesn't exist, add instruction to create it
+      if (receiverUsdcAccount == null) {
+        await solclient.createAssociatedTokenAccount(
+          mint: usdcMint,
+          funder: senderKeypair,
+          owner: receiverPublicKey,
+        );
+      }
+
+      final res = await solclient.transferSplToken(
+        mint: usdcMint,
+        destination: receiverPublicKey,
+        amount: usdcAmount,
+        owner: senderKeypair,
+      );
+
+
+      print('USDC Transaction sent! Signature: $res');
+
+      // Save the outgoing transaction
+      final currentPriceUsdcToUsd = 1.0; // USDC is pegged to USD, so the rate is always 1:1
+      final outgoingTransaction = TransactionDtoUsdc(amount: -amountInUsdc, price: currentPriceUsdcToUsd);
+      await saveUsdcOutgoingTransaction(outgoingTransaction);
+    } catch (e) {
+      print('Error sending USDC: $e');
+      throw e;
     }
   }
 }

@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class WalletHandler {
   static Future<double> getBalance(String walletAddress) async {
     try {
-      final lamports = await client.getBalance(walletAddress);
+      final lamports = await rpcClient.getBalance(walletAddress);
       final sol = lamports.value / lamportsPerSol;
       return sol;
     } catch (e) {
@@ -40,7 +40,7 @@ class WalletHandler {
 
   static Future<double> getTokenBalance(String walletAddress, String mintAddress) async {
  try {
-      final response = await client.getTokenAccountsByOwner(
+      final response = await rpcClient.getTokenAccountsByOwner(
         walletAddress,
         TokenAccountsFilter.byMint(mintAddress),
         encoding: Encoding.base64
@@ -48,7 +48,7 @@ class WalletHandler {
 
       double totalBalance = 0.0;
       for (var account in response.value) {
-        final accountInfo = await client.getTokenAccountBalance(account.pubkey);
+        final accountInfo = await rpcClient.getTokenAccountBalance(account.pubkey);
         totalBalance += double.parse(accountInfo.value.amount) / pow(10, accountInfo.value.decimals);
       }
 
