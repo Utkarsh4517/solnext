@@ -53,6 +53,7 @@ dependencies:
   shimmer: ^3.0.0
   qr_flutter: ^4.1.0
   flutter_secure_storage: ^9.2.2
+  modular_ui: ^0.0.5
 
 dev_dependencies:
   flutter_test:

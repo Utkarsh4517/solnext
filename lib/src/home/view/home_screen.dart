@@ -201,6 +201,24 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  showSendSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: SendMoneySheet(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -234,8 +252,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: 'Receive'),
                   TransactionButtons(
                       file: 'send_solnext',
-                      function: () async {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => SendMoneySheet()));
+                      function: () {
+                        showSendSheet(context);
                       },
                       text: 'Send'),
                   TransactionButtons(file: 'buy_solnext', function: () {}, text: 'Buy'),
@@ -243,28 +261,30 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Positioned(
-            top: getScreenheight(context) * 0.22,
-            child: HorizontalTokenCard(
-              priceInUsd: _priceOfSolInUsd,
-              price: _priceInSol,
-              changeInPriceInUsd: _profitOrLossSol,
-              tokenName: 'SOL',
-              tokenCurrencyName: 'Solana',
-              imgPath: 'SOLANA',
+          if (double.parse(_priceInSol) > 0)
+            Positioned(
+              top: getScreenheight(context) * 0.22,
+              child: HorizontalTokenCard(
+                priceInUsd: _priceOfSolInUsd,
+                price: _priceInSol,
+                changeInPriceInUsd: _profitOrLossSol,
+                tokenName: 'SOL',
+                tokenCurrencyName: 'Solana',
+                imgPath: 'SOLANA',
+              ),
             ),
-          ),
-          Positioned(
-            top: getScreenheight(context) * 0.34,
-            child: HorizontalTokenCard(
-              priceInUsd: _priceOfUsdcinUsd,
-              price: _priceInUsdc,
-              changeInPriceInUsd: _profitOrLossUsdc,
-              tokenName: 'USDC',
-              tokenCurrencyName: 'USD Coin',
-              imgPath: 'usdCoin',
+          if (double.parse(_priceInUsdc) > 0)
+            Positioned(
+              top: getScreenheight(context) * 0.34,
+              child: HorizontalTokenCard(
+                priceInUsd: _priceOfUsdcinUsd,
+                price: _priceInUsdc,
+                changeInPriceInUsd: _profitOrLossUsdc,
+                tokenName: 'USDC',
+                tokenCurrencyName: 'USD Coin',
+                imgPath: 'usdCoin',
+              ),
             ),
-          ),
           Positioned(
             top: getScreenheight(context) * 0.01,
             child: FutureBuilder<String>(
