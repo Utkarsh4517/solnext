@@ -6,6 +6,7 @@ import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/models/transactionDTO.dart';
 import 'package:solnext/core/shared/components/animated_price_text_widget.dart';
+import 'package:solnext/core/shared/components/buy_sheet.dart';
 import 'package:solnext/core/shared/components/custom_shimmer_animation.dart';
 import 'package:solnext/core/shared/components/receive_sheet.dart';
 import 'package:solnext/core/shared/components/send_money.dart';
@@ -219,6 +220,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+    showBuySheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: BuySheet(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -256,7 +274,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         showSendSheet(context);
                       },
                       text: 'Send'),
-                  TransactionButtons(file: 'buy_solnext', function: () {}, text: 'Buy'),
+                  TransactionButtons(file: 'buy_solnext', function: () {
+                    showBuySheet(context);
+                  }, text: 'Buy'),
                 ],
               ),
             ),

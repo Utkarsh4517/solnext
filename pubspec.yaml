@@ -55,6 +55,7 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   modular_ui: ^0.0.5
   lottie: ^3.1.2
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
