@@ -32,7 +32,7 @@ class HorizontalTokenCard extends StatelessWidget {
       ),
       width: getScreenWidth(context) * 0.92,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.black,
         boxShadow: boxShadow,
         borderRadius: BorderRadius.circular(12),
       ),
@@ -49,8 +49,8 @@ class HorizontalTokenCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$tokenCurrencyName', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)),
-                      Text('$price $tokenName', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: black2))
+                      Text('$tokenCurrencyName', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: Colors.white)),
+                      Text('$price $tokenName', style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: Colors.white))
                     ],
                   )
                 ],
@@ -61,7 +61,7 @@ class HorizontalTokenCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('\$$priceInUsd', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: black2)),
+              Text('\$$priceInUsd', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: Colors.white)),
               Text(
                 '${double.parse(changeInPriceInUsd) < 0 ? "-\$${(double.parse(changeInPriceInUsd) * -1)}" : "+\$${changeInPriceInUsd}"}',
                 style: GoogleFonts.poppins(

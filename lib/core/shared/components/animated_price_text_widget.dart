@@ -30,7 +30,7 @@ class AnimatedPriceTextWidget extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: getScreenWidth(context) * 0.15,
                 fontWeight: FontWeight.bold,
-                color: black2,
+                color: Color(0xffCBCBCB),
               ),
             ),
           ),

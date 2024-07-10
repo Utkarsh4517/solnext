@@ -220,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-    showBuySheet(BuildContext context) {
+  showBuySheet(BuildContext context) {
     return showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         actions: [
           Container(
             margin: EdgeInsets.only(right: getScreenWidth(context) * 0.05),
@@ -249,12 +249,41 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       // floatingActionButton: ScanAQrButton(),
       body: Stack(
         children: [
           Positioned(
-            bottom: getScreenheight(context) * 0.02,
+            top: getScreenheight(context) * 0.22,
+            child: Container(
+              width: getScreenWidth(context),
+              height: getScreenheight(context),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  gradient: LinearGradient(
+                    colors: [Color.fromARGB(255, 30, 19, 83), Color(0xff715aff)],
+                    stops: [0, 1],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  )),
+            ),
+          ),
+          Positioned(
+              bottom: getScreenheight(context) * 0.22,
+              child: Container(
+                width: getScreenWidth(context),
+                alignment: Alignment.center,
+                child: Text(
+                  'View transaction history',
+                  style: GoogleFonts.poppins(
+                    color: purple,
+                    fontWeight: FontWeight.w500,
+                    fontSize: getScreenWidth(context) * 0.04,
+                  ),
+                ),
+              )),
+          Positioned(
+            top: getScreenheight(context) * 0.26,
             left: getScreenWidth(context) * 0.05,
             child: Container(
               width: getScreenWidth(context) * 0.9,
@@ -263,27 +292,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TransactionButtons(
-                      file: 'receive_solnext',
+                      file: 'Receive',
                       function: () {
                         showReceiveSheet(context, _publicAddress);
                       },
                       text: 'Receive'),
                   TransactionButtons(
-                      file: 'send_solnext',
+                      file: 'Send',
                       function: () {
                         showSendSheet(context);
                       },
                       text: 'Send'),
-                  TransactionButtons(file: 'buy_solnext', function: () {
-                    showBuySheet(context);
-                  }, text: 'Buy'),
+                  TransactionButtons(
+                      file: 'scan',
+                      function: () {
+                        showBuySheet(context);
+                      },
+                      text: 'Scan'),
                 ],
               ),
             ),
           ),
           if (double.parse(_priceInSol) > 0)
             Positioned(
-              top: getScreenheight(context) * 0.22,
+              top: getScreenheight(context) * 0.38,
               child: HorizontalTokenCard(
                 priceInUsd: _priceOfSolInUsd,
                 price: _priceInSol,
@@ -295,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           if (double.parse(_priceInUsdc) > 0)
             Positioned(
-              top: getScreenheight(context) * 0.34,
+              top: getScreenheight(context) * 0.5,
               child: HorizontalTokenCard(
                 priceInUsd: _priceOfUsdcinUsd,
                 price: _priceInUsdc,

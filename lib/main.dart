@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solnext/src/home/view/home_screen.dart';
 import 'package:solnext/src/onBoarding/view/screens/on_boarding_screen.dart';
 import 'package:solnext/core/shared/nav_bar.dart';
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       home: !hasSeenOnboarding
           ? const OnBoardingScreen()
-          : const NavigationScreen(),
+          : const HomeScreen(),
     );
   }
 }
