@@ -14,6 +14,7 @@ import 'package:solnext/core/shared/components/send_money.dart';
 import 'package:solnext/core/shared/components/swap_button.dart';
 import 'package:solnext/core/shared/components/swap_sheet.dart';
 import 'package:solnext/core/utils/print_log.dart';
+import 'package:solnext/core/utils/tracker.dart';
 import 'package:solnext/core/utils/transaction_manager.dart';
 import 'package:solnext/core/utils/wallet_service.dart';
 import 'package:solnext/src/home/data/wallet.dart';
@@ -42,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _profitOrLossSolPercentage = '';
   String _profitOrLossUsdcPercentage = '';
   String _publicAddress = '';
+
 
   Future<String> fetchBalance() async {
     final pubAdd = await WalletService.getPublicKey();
@@ -161,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _profitOrLossPercentage = profitOrLossPercentage.toStringAsFixed(2);
       _profitOrLossSol = profitOrLossSol.toStringAsFixed(2);
       _profitOrLossUsdc = profitOrLossUsdc.toStringAsFixed(2);
-      _profitOrLossUsdcPercentage = profitOrLossUsdcPercentage.toStringAsExponential(2);
+      _profitOrLossUsdcPercentage = profitOrLossUsdcPercentage.toStringAsFixed(2);
       _profitOrLossSolPercentage = profitOrLossSolPercentage.toStringAsFixed(2);
     });
 

@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
+import 'package:solnext/core/utils/tracker.dart';
 
 class SwapSheet extends StatefulWidget {
   const SwapSheet({super.key});
@@ -12,14 +15,36 @@ class SwapSheet extends StatefulWidget {
   State<SwapSheet> createState() => _SwapSheetState();
 }
 
-class _SwapSheetState extends State<SwapSheet> with SingleTickerProviderStateMixin {
+class _SwapSheetState extends State<SwapSheet> {
+  Timer? _timer;
+  String _priceInSol = '';
+  String _priceOfSolInUsd = '';
+  String _priceInUsdc = '';
+  String _priceOfUsdcInUsd = '';
+  final solController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    fetch();
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      fetch();
+    });
+  }
+
+  fetch() async {
+    final balance = await Tracker.fetchBalance();
+    setState(() {
+      _priceInSol = balance.priceInSol;
+      _priceOfSolInUsd = balance.priceOfSolInUsd;
+      _priceInUsdc = balance.priceInUsdc;
+      _priceOfUsdcInUsd = balance.priceOfUsdcInUsd;
+    });
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -72,14 +97,20 @@ class _SwapSheetState extends State<SwapSheet> with SingleTickerProviderStateMix
                 ),
                 SizedBox(height: getScreenheight(context) * 0.025),
                 TextField(
+                  controller: solController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    suffixIcon: Container(
-                      margin: EdgeInsets.only(top: 10, right: 10),
-                      child: Text(
-                        'MAX',
-                        style: GoogleFonts.poppins(color: purple, fontWeight: FontWeight.w600, fontSize: getScreenWidth(context) * 0.05),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        solController.text = _priceInSol;
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(top: 10, right: 10),
+                        child: Text(
+                          'MAX',
+                          style: GoogleFonts.poppins(color: purple, fontWeight: FontWeight.w600, fontSize: getScreenWidth(context) * 0.05),
+                        ),
                       ),
                     ),
                     border: InputBorder.none,
