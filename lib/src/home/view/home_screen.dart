@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
@@ -11,6 +12,7 @@ import 'package:solnext/core/shared/components/custom_shimmer_animation.dart';
 import 'package:solnext/core/shared/components/receive_sheet.dart';
 import 'package:solnext/core/shared/components/send_money.dart';
 import 'package:solnext/core/shared/components/swap_button.dart';
+import 'package:solnext/core/shared/components/swap_sheet.dart';
 import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/transaction_manager.dart';
 import 'package:solnext/core/utils/wallet_service.dart';
@@ -237,6 +239,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  showSwapSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (context) {
+        return SwapSheet();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -261,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                   gradient: LinearGradient(
-                    colors: [Color.fromARGB(255, 30, 19, 83), Color(0xff715aff)],
+                    colors: [Color(0xff191628), Color(0xff715aff)],
                     stops: [0, 1],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -380,10 +398,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      Container(
-                        margin: EdgeInsets.only(left: getScreenWidth(context) * 0.3, top: getScreenheight(context) * 0.01),
-                        alignment: Alignment.center,
-                        child: SwapButton(),
+                      GestureDetector(
+                        onTap: () {
+                          showSwapSheet(context);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(left: getScreenWidth(context) * 0.3, top: getScreenheight(context) * 0.01),
+                          alignment: Alignment.center,
+                          child: SwapButton(),
+                        ),
                       )
                     ],
                   );
