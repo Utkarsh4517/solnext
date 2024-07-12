@@ -60,7 +60,6 @@ class _SwapSheetState extends State<SwapSheet> {
   Widget build(BuildContext context) {
     return Container(
       width: getScreenWidth(context),
-      height: getScreenheight(context) * 0.9,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           gradient: LinearGradient(
@@ -70,6 +69,7 @@ class _SwapSheetState extends State<SwapSheet> {
             end: Alignment.bottomCenter,
           )),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: getScreenWidth(context),
@@ -133,8 +133,13 @@ class _SwapSheetState extends State<SwapSheet> {
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     suffixIcon: GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         solController.text = _priceInSol;
+                        final res = await Jupiter.getSolToUsdcQuote(amount: solController.text, slippage: '50');
+                        setState(() {
+                          usdcController.text = res.toString();
+                          isButtonEnabled = true;
+                        });
                       },
                       child: Container(
                         margin: EdgeInsets.only(top: 10, right: 10),
@@ -188,7 +193,7 @@ class _SwapSheetState extends State<SwapSheet> {
                               'USD Coin',
                               style: GoogleFonts.poppins(color: Color(0xffB6B6B6), fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(width: getScreenWidth(context) * 0.3),
+                            SizedBox(width: getScreenWidth(context) * 0.25),
                             Text(
                               'USD Coin',
                               style: GoogleFonts.poppins(color: Color(0xffB6B6B6), fontWeight: FontWeight.bold),
@@ -226,6 +231,9 @@ class _SwapSheetState extends State<SwapSheet> {
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   style: GoogleFonts.poppins(
                     color: Color(0xffB6B6B6),
@@ -237,10 +245,7 @@ class _SwapSheetState extends State<SwapSheet> {
             ),
           ),
           SizedBox(
-            height: getScreenheight(context) * 0.34,
-          ),
-          SizedBox(
-            width: getScreenWidth(context) * 0.9,
+            width: getScreenWidth(context) * 0.85,
             height: getScreenWidth(context) * 0.125,
             child: PrimaryButton(
               onPressed: () async {
@@ -260,7 +265,8 @@ class _SwapSheetState extends State<SwapSheet> {
               text: 'Confirm Swap',
               color: isButtonEnabled ? Colors.black : Colors.grey.shade500,
             ),
-          )
+          ),
+          SizedBox(height: getScreenheight(context) * 0.02),
         ],
       ),
     );

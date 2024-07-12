@@ -24,7 +24,7 @@ class _SendMoneySheetState extends State<SendMoneySheet> with SingleTickerProvid
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    if(widget.toAddress != null){
+    if (widget.toAddress != null) {
       _receiverAddressController.text = widget.toAddress!;
     }
   }
@@ -39,54 +39,57 @@ class _SendMoneySheetState extends State<SendMoneySheet> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: getScreenWidth(context),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        color: Colors.white,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: getScreenheight(context) * 0.02),
-          if (currentState == '')
-            TabBar(
-              controller: _tabController,
-              onTap: (value) {
-                setState(() {});
-              },
-              dividerColor: Color.fromARGB(255, 255, 255, 255),
-              indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
-              tabs: [
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 400),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color.fromARGB(255, 240, 240, 240)),
-                  padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05, vertical: getScreenWidth(context) * 0.02),
-                  child: Text('Send SOL', style: GoogleFonts.poppins(color: _tabController.index == 0 ? purple : black2, fontWeight: FontWeight.w600)),
-                ),
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 400),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color.fromARGB(255, 240, 240, 240)),
-                  padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05, vertical: getScreenWidth(context) * 0.02),
-                  child: Text('Send USDC', style: GoogleFonts.poppins(color: _tabController.index == 1 ? purple : black2, fontWeight: FontWeight.w600)),
-                ),
-              ],
-              labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600),
-              labelColor: purple,
-              unselectedLabelColor: Colors.grey,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: getScreenWidth(context),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          gradient: gradient,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: getScreenheight(context) * 0.02),
+            if (currentState == '')
+              TabBar(
+                controller: _tabController,
+                onTap: (value) {
+                  setState(() {});
+                },
+                dividerColor: Color.fromARGB(255, 255, 255, 255),
+                indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+                tabs: [
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 400),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color.fromARGB(255, 240, 240, 240)),
+                    padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05, vertical: getScreenWidth(context) * 0.02),
+                    child: Text('Send SOL', style: GoogleFonts.poppins(color: _tabController.index == 0 ? purple : black2, fontWeight: FontWeight.w600)),
+                  ),
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 400),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color.fromARGB(255, 240, 240, 240)),
+                    padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05, vertical: getScreenWidth(context) * 0.02),
+                    child: Text('Send USDC', style: GoogleFonts.poppins(color: _tabController.index == 1 ? purple : black2, fontWeight: FontWeight.w600)),
+                  ),
+                ],
+                labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                labelColor: purple,
+                unselectedLabelColor: Colors.grey,
+              ),
+            SizedBox(height: getScreenheight(context) * 0.02),
+            Container(
+              height: getScreenheight(context) * 0.4,
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildSendTab('SOL'),
+                  _buildSendTab('USDC'),
+                ],
+              ),
             ),
-          SizedBox(height: getScreenheight(context) * 0.02),
-          Container(
-            height: getScreenheight(context) * 0.4,
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildSendTab('SOL'),
-                _buildSendTab('USDC'),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

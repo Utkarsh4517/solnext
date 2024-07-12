@@ -74,19 +74,30 @@ class _HomeScreenState extends State<HomeScreen> {
   showReceiveSheet(BuildContext context, String address) {
     return showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(25.0),
         ),
       ),
       builder: (context) {
-        return ReceiveSheet(address: address);
+        return Padding(
+          padding: const EdgeInsets.all(10),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(25.0),
+              bottom: Radius.circular(25.0),
+            ),
+            child: ReceiveSheet(address: address),
+          ),
+        );
       },
     );
   }
 
   showSendSheet(BuildContext context) {
     return showModalBottomSheet(
+      backgroundColor: Colors.transparent,
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -96,8 +107,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: SendMoneySheet(),
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(25.0),
+              bottom: Radius.circular(10.0),
+            ),
+            child: SendMoneySheet(),
+          ),
         );
       },
     );
@@ -113,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
           child: BuySheet(),
         );
       },
@@ -123,15 +140,24 @@ class _HomeScreenState extends State<HomeScreen> {
   showSwapSheet(BuildContext context) {
     return showModalBottomSheet(
       context: context,
-      enableDrag: true,
       isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(25.0),
         ),
       ),
       builder: (context) {
-        return SwapSheet();
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20, left: 10, right: 10),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(25.0),
+              bottom: Radius.circular(25.0),
+            ),
+            child: SwapSheet(),
+          ),
+        );
       },
     );
   }
@@ -208,29 +234,29 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           // if (double.parse(_priceInSol) > 0)
-            Positioned(
-              top: getScreenheight(context) * 0.38,
-              child: HorizontalTokenCard(
-                priceInUsd: _priceOfSolInUsd,
-                price: _priceInSol,
-                changeInPriceInUsd: _profitOrLossSol,
-                tokenName: 'SOL',
-                tokenCurrencyName: 'Solana',
-                imgPath: 'SOLANA',
-              ),
+          Positioned(
+            top: getScreenheight(context) * 0.38,
+            child: HorizontalTokenCard(
+              priceInUsd: _priceOfSolInUsd,
+              price: _priceInSol,
+              changeInPriceInUsd: _profitOrLossSol,
+              tokenName: 'SOL',
+              tokenCurrencyName: 'Solana',
+              imgPath: 'SOLANA',
             ),
+          ),
           // if (double.parse(_priceInUsdc) > 0)
-            Positioned(
-              top: getScreenheight(context) * 0.5,
-              child: HorizontalTokenCard(
-                priceInUsd: _priceOfUsdcinUsd,
-                price: _priceInUsdc,
-                changeInPriceInUsd: _profitOrLossUsdc,
-                tokenName: 'USDC',
-                tokenCurrencyName: 'USD Coin',
-                imgPath: 'usdCoin',
-              ),
+          Positioned(
+            top: getScreenheight(context) * 0.5,
+            child: HorizontalTokenCard(
+              priceInUsd: _priceOfUsdcinUsd,
+              price: _priceInUsdc,
+              changeInPriceInUsd: _profitOrLossUsdc,
+              tokenName: 'USDC',
+              tokenCurrencyName: 'USD Coin',
+              imgPath: 'usdCoin',
             ),
+          ),
           Positioned(
             top: getScreenheight(context) * 0.01,
             child: FutureBuilder<String>(
