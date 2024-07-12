@@ -5,6 +5,8 @@ import 'package:modular_ui/modular_ui.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
+import 'package:solnext/core/shared/components/send_sol_loading_sheet.dart';
+import 'package:solnext/core/shared/components/send_usdc_loading_sheet.dart';
 import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/transaction_manager.dart';
 
@@ -138,51 +140,56 @@ class _SendMoneySheetState extends State<SendMoneySheet> with SingleTickerProvid
             PrimaryButton(
                 color: Color(0xff161616),
                 onPressed: () async {
-                  try {
-                    if (tokenType == 'SOL') {
-                      setState(() {
-                        currentState = 'loading';
-                      });
-                      await TransactionManager.sendSol(receiverAddress: _receiverAddressController.text, amountInSol: double.parse(_tokenAmountController.text));
-                      setState(() {
-                        currentState = 'success';
-                      });
-                    } else if (tokenType == 'USDC') {
-                      setState(() {
-                        currentState = 'loading';
-                      });
-                      await TransactionManager.sendUsdc(receiverAddress: _receiverAddressController.text, amountInUsdc: double.parse(_tokenAmountController.text));
-                      setState(() {
-                        currentState = 'success';
-                      });
-                    }
-                    PrintLog.printLog(currentState);
-                  } catch (e) {
-                    setState(() {
-                      currentState = 'Error';
-                    });
+                  if (tokenType == 'SOL') {
+                    Navigator.pop(context);
+                    return showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(25.0),
+                        ),
+                      ),
+                      builder: (context) {
+                        return Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(25.0),
+                              bottom: Radius.circular(25.0),
+                            ),
+                            child: SendSolLoadingSheet(amountInSol: double.parse(_tokenAmountController.text), receiverAddress: _receiverAddressController.text),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (tokenType == 'USDC') {
+                    Navigator.pop(context);
+                    return showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(25.0),
+                        ),
+                      ),
+                      builder: (context) {
+                        return Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(25.0),
+                              bottom: Radius.circular(25.0),
+                            ),
+                            child: SendUsdcLoadingSheet(amountInUsdc: double.parse(_tokenAmountController.text), receiverAddress: _receiverAddressController.text),
+                          ),
+                        );
+                      },
+                    );
                   }
+                  PrintLog.printLog(currentState);
                 },
                 text: 'Send $tokenType'),
-          SizedBox(height: getScreenheight(context) * 0.02),
-          if (currentState == 'loading')
-            Container(
-              child: Lottie.asset('assets/svgs/loading_sol.json', width: 200, height: 200),
-            ),
-          if (currentState == 'success')
-            Container(
-              child: Lottie.asset('assets/svgs/success.json', width: 200, height: 200),
-            ),
-          if (currentState == 'error')
-            Container(
-              child: Lottie.asset('assets/svgs/error.json', width: 200, height: 200),
-            ),
-          if (currentState != '' && currentState != 'loading')
-            PrimaryButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                text: 'Close')
         ],
       ),
     );

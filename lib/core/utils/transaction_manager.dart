@@ -82,7 +82,7 @@ class TransactionManager {
     return transactions.map((t) => TransactionDtoUsdc.fromJson(jsonDecode(t))).toList();
   }
 
-  static Future<void> sendSol({required String receiverAddress, required double amountInSol}) async {
+  static Future<String> sendSol({required String receiverAddress, required double amountInSol}) async {
     final lamports = (amountInSol * 1e9).toInt();
     final senderPrivateMnemonics = await WalletService.getMnemonics();
     final senderKeypair = await Ed25519HDKeyPair.fromMnemonic(senderPrivateMnemonics);
@@ -107,12 +107,14 @@ class TransactionManager {
       final currentPriceSolToUsd = await WalletHandler.getSolToUsdcConversionRate();
       final outgoingTransaction = TransactionDtoSol(amount: -amountInSol, price: currentPriceSolToUsd);
       await saveSolOutgoingTransaction(outgoingTransaction);
+      return signature;
     } catch (e) {
       print('Error sending SOL: $e');
+      throw Exception('Error sending SOL: $e');
     }
   }
 
-  static Future<void> sendUsdc({required String receiverAddress, required double amountInUsdc}) async {
+  static Future<String> sendUsdc({required String receiverAddress, required double amountInUsdc}) async {
     final usdcMintAddress = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
     final usdcDecimals = 6; // USDC has 6 decimal places
     final usdcAmount = (amountInUsdc * pow(10, usdcDecimals)).toInt();
@@ -154,13 +156,13 @@ class TransactionManager {
         owner: senderKeypair,
       );
 
-
       print('USDC Transaction sent! Signature: $res');
 
       // Save the outgoing transaction
       final currentPriceUsdcToUsd = 1.0; // USDC is pegged to USD, so the rate is always 1:1
       final outgoingTransaction = TransactionDtoUsdc(amount: -amountInUsdc, price: currentPriceUsdcToUsd);
       await saveUsdcOutgoingTransaction(outgoingTransaction);
+      return res;
     } catch (e) {
       print('Error sending USDC: $e');
       throw e;
