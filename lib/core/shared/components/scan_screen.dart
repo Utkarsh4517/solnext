@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
+import 'package:solnext/core/shared/components/buy_sheet.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
+import 'package:solnext/core/shared/components/send_money.dart';
 
 class QRScannerScreen extends StatefulWidget {
   @override
@@ -104,7 +106,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: PrimaryButton(
-                      text: 'Copy address',
+                      text: 'Send Crypto',
                       onPressed: _copyToClipboard,
                     ),
                   ),
@@ -118,6 +120,22 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   void _copyToClipboard() {
     Clipboard.setData(ClipboardData(text: _scannedCode));
+    Navigator.pop(context);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: SendMoneySheet(toAddress: _scannedCode),
+        );
+      },
+    );
   }
 
   @override

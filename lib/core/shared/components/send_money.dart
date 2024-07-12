@@ -8,7 +8,8 @@ import 'package:solnext/core/shared/components/primary_button.dart';
 import 'package:solnext/core/utils/transaction_manager.dart';
 
 class SendMoneySheet extends StatefulWidget {
-  const SendMoneySheet({super.key});
+  final String? toAddress;
+  const SendMoneySheet({super.key, this.toAddress});
 
   @override
   State<SendMoneySheet> createState() => _SendMoneySheetState();
@@ -23,6 +24,9 @@ class _SendMoneySheetState extends State<SendMoneySheet> with SingleTickerProvid
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    if(widget.toAddress != null){
+      _receiverAddressController.text = widget.toAddress!;
+    }
   }
 
   @override
