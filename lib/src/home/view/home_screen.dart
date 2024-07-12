@@ -8,7 +8,6 @@ import 'package:solnext/core/shared/components/buy_sheet.dart';
 import 'package:solnext/core/shared/components/custom_shimmer_animation.dart';
 import 'package:solnext/core/shared/components/receive_sheet.dart';
 import 'package:solnext/core/shared/components/scan_screen.dart';
-import 'package:solnext/core/shared/components/send_money.dart';
 import 'package:solnext/core/shared/components/swap_button.dart';
 import 'package:solnext/core/shared/components/swap_sheet.dart';
 import 'package:solnext/core/shared/components/token_to_send_sheet.dart';

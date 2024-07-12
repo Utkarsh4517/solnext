@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
-import 'package:modular_ui/modular_ui.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
 import 'package:solnext/core/shared/components/send_sol_loading_sheet.dart';
 import 'package:solnext/core/shared/components/send_usdc_loading_sheet.dart';
 import 'package:solnext/core/utils/print_log.dart';
-import 'package:solnext/core/utils/transaction_manager.dart';
 
 class SendMoneySheet extends StatefulWidget {
   final String? toAddress;

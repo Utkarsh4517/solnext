@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solana/dto.dart';
 import 'package:solana/solana.dart';
-import 'package:solana/solana_pay.dart';
 import 'package:solnext/core/models/transactionDTO.dart';
 import 'package:solnext/core/utils/solana.dart';
 import 'package:solnext/core/utils/wallet_service.dart';
