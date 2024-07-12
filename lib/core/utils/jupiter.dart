@@ -24,7 +24,7 @@ class Jupiter {
     }
   }
 
-  static Future<dynamic> swapSolToUsdc({required String userPublicKey}) async {
+  static Future<Map<String, dynamic>> swapSolToUsdc({required String userPublicKey}) async {
     String apiUrl = 'https://quote-api.jup.ag/v6/swap';
     try {
       final response = await http.post(Uri.parse(apiUrl),
@@ -34,6 +34,7 @@ class Jupiter {
           },
           body: jsonEncode({"userPublicKey": userPublicKey, "quoteResponse": quoteResponse}));
       PrintLog.printLog(jsonDecode(response.body));
+      return jsonDecode(response.body);
     } catch (e) {
       throw Exception(e.toString());
     }

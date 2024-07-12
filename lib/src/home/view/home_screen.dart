@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
@@ -11,7 +12,7 @@ import 'package:solnext/core/shared/components/receive_sheet.dart';
 import 'package:solnext/core/shared/components/send_money.dart';
 import 'package:solnext/core/shared/components/swap_button.dart';
 import 'package:solnext/core/shared/components/swap_sheet.dart';
-import 'package:solnext/core/utils/print_log.dart';
+import 'package:solnext/core/shared/components/swap_transaction_loading_sheet.dart';
 import 'package:solnext/core/utils/tracker.dart';
 import 'package:solnext/src/home/view/widgets/horizontal_token_card.dart';
 import 'package:solnext/src/home/view/widgets/transaction_buttons.dart';
@@ -143,9 +144,12 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         actions: [
-          Container(
-            margin: EdgeInsets.only(right: getScreenWidth(context) * 0.05),
-            child: SvgPicture.asset('assets/svgs/settings.svg'),
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              margin: EdgeInsets.only(right: getScreenWidth(context) * 0.05),
+              child: SvgPicture.asset('assets/svgs/settings.svg'),
+            ),
           ),
         ],
       ),

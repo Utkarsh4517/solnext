@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
+import 'package:solnext/core/shared/components/swap_transaction_loading_sheet.dart';
 import 'package:solnext/core/utils/jupiter.dart';
 import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/tracker.dart';
@@ -117,7 +118,6 @@ class _SwapSheetState extends State<SwapSheet> {
                         textColor = Colors.red;
                         isButtonEnabled = false;
                         PrintLog.printLog(Jupiter.quoteResponse);
-
                       });
                     } else {
                       setState(() {
@@ -243,8 +243,19 @@ class _SwapSheetState extends State<SwapSheet> {
             width: getScreenWidth(context) * 0.9,
             height: getScreenWidth(context) * 0.125,
             child: PrimaryButton(
-              onPressed: () async{
-                await Jupiter.swapSolToUsdc(userPublicKey: _publicAddress);
+              onPressed: () async {
+                Navigator.pop(context);
+                return showModalBottomSheet(
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(25.0),
+                    ),
+                  ),
+                  builder: (context) {
+                    return SwapTransactionLoadingSheet(userPublicKey: _publicAddress);
+                  },
+                );
               },
               text: 'Confirm Swap',
               color: isButtonEnabled ? Colors.black : Colors.grey.shade500,
