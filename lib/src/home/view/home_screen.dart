@@ -207,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          if (double.parse(_priceInSol) > 0)
+          // if (double.parse(_priceInSol) > 0)
             Positioned(
               top: getScreenheight(context) * 0.38,
               child: HorizontalTokenCard(
@@ -219,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 imgPath: 'SOLANA',
               ),
             ),
-          if (double.parse(_priceInUsdc) > 0)
+          // if (double.parse(_priceInUsdc) > 0)
             Positioned(
               top: getScreenheight(context) * 0.5,
               child: HorizontalTokenCard(
