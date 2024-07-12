@@ -249,6 +249,7 @@ class _SwapSheetState extends State<SwapSheet> {
             height: getScreenWidth(context) * 0.125,
             child: PrimaryButton(
               onPressed: () async {
+                if (!isButtonEnabled) return;
                 Navigator.pop(context);
                 return showModalBottomSheet(
                   backgroundColor: Colors.transparent,

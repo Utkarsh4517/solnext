@@ -11,6 +11,7 @@ import 'package:solnext/core/shared/components/scan_screen.dart';
 import 'package:solnext/core/shared/components/send_money.dart';
 import 'package:solnext/core/shared/components/swap_button.dart';
 import 'package:solnext/core/shared/components/swap_sheet.dart';
+import 'package:solnext/core/shared/components/token_to_send_sheet.dart';
 import 'package:solnext/core/utils/tracker.dart';
 import 'package:solnext/src/home/view/widgets/horizontal_token_card.dart';
 import 'package:solnext/src/home/view/widgets/transaction_buttons.dart';
@@ -89,6 +90,30 @@ class _HomeScreenState extends State<HomeScreen> {
               bottom: Radius.circular(25.0),
             ),
             child: ReceiveSheet(address: address),
+          ),
+        );
+      },
+    );
+  }
+
+  showTokenToSendSheet(BuildContext context, HorizontalTokenCard solana, HorizontalTokenCard usdc) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(10),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(25.0),
+              bottom: Radius.circular(25.0),
+            ),
+            child: TokenToSendSheet(solana: solana, usdc: usdc),
           ),
         );
       },
@@ -220,7 +245,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   TransactionButtons(
                       file: 'Send',
                       function: () {
-                        showSendSheet(context);
+                        // showSendSheet(context);
+                        showTokenToSendSheet(
+                          context,
+                          HorizontalTokenCard(
+                            priceInUsd: _priceOfSolInUsd,
+                            price: _priceInSol,
+                            changeInPriceInUsd: _profitOrLossSol,
+                            tokenName: 'SOL',
+                            tokenCurrencyName: 'Solana',
+                            imgPath: 'SOLANA',
+                          ),
+                          HorizontalTokenCard(
+                            priceInUsd: _priceOfUsdcinUsd,
+                            price: _priceInUsdc,
+                            changeInPriceInUsd: _profitOrLossUsdc,
+                            tokenName: 'USDC',
+                            tokenCurrencyName: 'USD Coin',
+                            imgPath: 'usdCoin',
+                          ),
+                        );
                       },
                       text: 'Send'),
                   TransactionButtons(
