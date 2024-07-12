@@ -122,6 +122,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     Navigator.pop(context);
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -131,7 +132,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: SendMoneySheet(toAddress: _scannedCode),
+          child: SendMoneySheet(toAddress: _scannedCode, tokenType: Token.SOL),
         );
       },
     );

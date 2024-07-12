@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
+import 'package:solnext/core/shared/components/send_money.dart';
 import 'package:solnext/src/home/view/widgets/horizontal_token_card.dart';
 
 class TokenToSendSheet extends StatefulWidget {
@@ -36,8 +39,62 @@ class _TokenToSendSheetState extends State<TokenToSendSheet> {
             ),
           ),
           SizedBox(height: getScreenheight(context) * 0.01),
-          widget.solana,
-          widget.usdc,
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              showModalBottomSheet(
+                backgroundColor: Colors.transparent,
+                context: context,
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(25.0),
+                  ),
+                ),
+                builder: (context) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(25.0),
+                        bottom: Radius.circular(10.0),
+                      ),
+                      child: SendMoneySheet(tokenType: Token.SOL),
+                    ),
+                  );
+                },
+              );
+            },
+            child: widget.solana,
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              showModalBottomSheet(
+                backgroundColor: Colors.transparent,
+                context: context,
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(25.0),
+                  ),
+                ),
+                builder: (context) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(25.0),
+                        bottom: Radius.circular(10.0),
+                      ),
+                      child: SendMoneySheet(tokenType: Token.USDC),
+                    ),
+                  );
+                },
+              );
+            },
+            child: widget.usdc,
+          ),
         ],
       ),
     );

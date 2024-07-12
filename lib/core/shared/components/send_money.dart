@@ -5,37 +5,45 @@ import 'package:modular_ui/modular_ui.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
+import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/transaction_manager.dart';
 
 class SendMoneySheet extends StatefulWidget {
   final String? toAddress;
-  const SendMoneySheet({super.key, this.toAddress});
+  final Token tokenType;
+
+  const SendMoneySheet({super.key, this.toAddress, required this.tokenType});
 
   @override
   State<SendMoneySheet> createState() => _SendMoneySheetState();
 }
 
+enum Token { SOL, USDC }
+
 class _SendMoneySheetState extends State<SendMoneySheet> with SingleTickerProviderStateMixin {
   final _tokenAmountController = TextEditingController();
   final _receiverAddressController = TextEditingController();
-  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
     if (widget.toAddress != null) {
       _receiverAddressController.text = widget.toAddress!;
+    }
+    if (widget.tokenType == Token.SOL) {
+      tokenType = 'SOL';
+    } else {
+      tokenType = 'USDC';
     }
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
     super.dispose();
   }
 
   String currentState = '';
+  String tokenType = '';
 
   @override
   Widget build(BuildContext context) {
@@ -51,43 +59,7 @@ class _SendMoneySheetState extends State<SendMoneySheet> with SingleTickerProvid
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(height: getScreenheight(context) * 0.02),
-            if (currentState == '')
-              TabBar(
-                controller: _tabController,
-                onTap: (value) {
-                  setState(() {});
-                },
-                dividerColor: Color.fromARGB(255, 255, 255, 255),
-                indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
-                tabs: [
-                  AnimatedContainer(
-                    duration: Duration(milliseconds: 400),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color.fromARGB(255, 240, 240, 240)),
-                    padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05, vertical: getScreenWidth(context) * 0.02),
-                    child: Text('Send SOL', style: GoogleFonts.poppins(color: _tabController.index == 0 ? purple : black2, fontWeight: FontWeight.w600)),
-                  ),
-                  AnimatedContainer(
-                    duration: Duration(milliseconds: 400),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color.fromARGB(255, 240, 240, 240)),
-                    padding: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05, vertical: getScreenWidth(context) * 0.02),
-                    child: Text('Send USDC', style: GoogleFonts.poppins(color: _tabController.index == 1 ? purple : black2, fontWeight: FontWeight.w600)),
-                  ),
-                ],
-                labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600),
-                labelColor: purple,
-                unselectedLabelColor: Colors.grey,
-              ),
-            SizedBox(height: getScreenheight(context) * 0.02),
-            Container(
-              height: getScreenheight(context) * 0.4,
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildSendTab('SOL'),
-                  _buildSendTab('USDC'),
-                ],
-              ),
-            ),
+            if (currentState == '') _buildSendTab(tokenType),
           ],
         ),
       ),
@@ -95,75 +67,124 @@ class _SendMoneySheetState extends State<SendMoneySheet> with SingleTickerProvid
   }
 
   Widget _buildSendTab(String tokenType) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(height: getScreenheight(context) * 0.015),
-        if (currentState == '')
-          MUIPrimaryInputField(
-            hintText: 'Receiver\'s address',
-            controller: _receiverAddressController,
-            filledColor: Color.fromARGB(255, 240, 240, 240),
-            disabledBorderColor: Colors.white,
-            enabledBorderColor: Colors.white,
-          ),
-        if (currentState == '') SizedBox(height: getScreenheight(context) * 0.02),
-        if (currentState == '')
-          MUIPrimaryInputField(
-            hintText: '$tokenType amount to transfer',
-            controller: _tokenAmountController,
-            filledColor: Color.fromARGB(255, 240, 240, 240),
-            disabledBorderColor: Colors.white,
-            enabledBorderColor: Colors.white,
-          ),
-        if (currentState == '') SizedBox(height: getScreenheight(context) * 0.02),
-        if (currentState == '')
-          PrimaryButton(
-              onPressed: () async {
-                try {
-                  if (tokenType == 'SOL') {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: getScreenheight(context) * 0.015),
+          if (currentState == '')
+            SizedBox(
+              width: getScreenWidth(context) * 0.6,
+              child: Text(
+                'Send $tokenType to a different wallet seamlessly using solnext.',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(fontSize: getScreenWidth(context) * 0.03, color: Colors.white),
+              ),
+            ),
+          SizedBox(height: getScreenheight(context) * 0.015),
+          if (currentState == '')
+            TextField(
+              controller: _receiverAddressController,
+              enabled: true,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                border: InputBorder.none,
+                hintText: 'Receiver\'s address',
+                hintStyle: GoogleFonts.poppins(color: Color(0xffB6B6B6), fontWeight: FontWeight.w700, fontSize: getScreenWidth(context) * 0.04),
+                fillColor: Color(0xff161616),
+                filled: true,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              style: GoogleFonts.poppins(
+                color: Color(0xffB6B6B6),
+                fontWeight: FontWeight.w700,
+                fontSize: getScreenWidth(context) * 0.04,
+              ),
+            ),
+          if (currentState == '') SizedBox(height: getScreenheight(context) * 0.02),
+          if (currentState == '')
+            TextField(
+              keyboardType: TextInputType.number,
+              controller: _tokenAmountController,
+              enabled: true,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                border: InputBorder.none,
+                hintText: '$tokenType amount to transfer',
+                hintStyle: GoogleFonts.poppins(color: Color(0xffB6B6B6), fontWeight: FontWeight.w700, fontSize: getScreenWidth(context) * 0.05),
+                fillColor: Color(0xff161616),
+                filled: true,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              style: GoogleFonts.poppins(
+                color: Color(0xffB6B6B6),
+                fontWeight: FontWeight.w700,
+                fontSize: getScreenWidth(context) * 0.05,
+              ),
+            ),
+          if (currentState == '') SizedBox(height: getScreenheight(context) * 0.02),
+          if (currentState == '')
+            PrimaryButton(
+                color: Color(0xff161616),
+                onPressed: () async {
+                  try {
+                    if (tokenType == 'SOL') {
+                      setState(() {
+                        currentState = 'loading';
+                      });
+                      await TransactionManager.sendSol(receiverAddress: _receiverAddressController.text, amountInSol: double.parse(_tokenAmountController.text));
+                      setState(() {
+                        currentState = 'success';
+                      });
+                    } else if (tokenType == 'USDC') {
+                      setState(() {
+                        currentState = 'loading';
+                      });
+                      await TransactionManager.sendUsdc(receiverAddress: _receiverAddressController.text, amountInUsdc: double.parse(_tokenAmountController.text));
+                      setState(() {
+                        currentState = 'success';
+                      });
+                    }
+                    PrintLog.printLog(currentState);
+                  } catch (e) {
                     setState(() {
-                      currentState = 'loading';
-                    });
-                    await TransactionManager.sendSol(receiverAddress: _receiverAddressController.text, amountInSol: double.parse(_tokenAmountController.text));
-                    setState(() {
-                      currentState = 'success';
-                    });
-                  } else if (tokenType == 'USDC') {
-                    setState(() {
-                      currentState = 'loading';
-                    });
-                    await TransactionManager.sendUsdc(receiverAddress: _receiverAddressController.text, amountInUsdc: double.parse(_tokenAmountController.text));
-                    setState(() {
-                      currentState = 'success';
+                      currentState = 'Error';
                     });
                   }
-                } catch (e) {
-                  setState(() {
-                    currentState = 'Error';
-                  });
-                }
-              },
-              text: 'Send $tokenType'),
-        if (currentState == 'loading')
-          Container(
-            child: Lottie.asset('assets/svgs/loading_sol.json', width: 200, height: 200),
-          ),
-        if (currentState == 'success')
-          Container(
-            child: Lottie.asset('assets/svgs/success.json', width: 200, height: 200),
-          ),
-        if (currentState == 'error')
-          Container(
-            child: Lottie.asset('assets/svgs/error.json', width: 200, height: 200),
-          ),
-        if (currentState != '' && currentState != 'loading')
-          PrimaryButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              text: 'Close')
-      ],
+                },
+                text: 'Send $tokenType'),
+          SizedBox(height: getScreenheight(context) * 0.02),
+          if (currentState == 'loading')
+            Container(
+              child: Lottie.asset('assets/svgs/loading_sol.json', width: 200, height: 200),
+            ),
+          if (currentState == 'success')
+            Container(
+              child: Lottie.asset('assets/svgs/success.json', width: 200, height: 200),
+            ),
+          if (currentState == 'error')
+            Container(
+              child: Lottie.asset('assets/svgs/error.json', width: 200, height: 200),
+            ),
+          if (currentState != '' && currentState != 'loading')
+            PrimaryButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                text: 'Close')
+        ],
+      ),
     );
   }
 }

@@ -120,30 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  showSendSheet(BuildContext context) {
-    return showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(25.0),
-        ),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(25.0),
-              bottom: Radius.circular(10.0),
-            ),
-            child: SendMoneySheet(),
-          ),
-        );
-      },
-    );
-  }
+
 
   showBuySheet(BuildContext context) {
     return showModalBottomSheet(
