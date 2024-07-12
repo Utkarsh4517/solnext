@@ -20,7 +20,8 @@ class Tracker {
         String publicAddress
       })> fetchBalance() async {
     final pubAdd = await WalletService.getPublicKey();
-    final usdcMintAddress = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
+    final usdcMintAddress = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'; // Devnet USDC mint address
+    // final usdcMintAddress = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'; // Mainnet USDC mint address
 
     /// FOR SOL
     final currentBalanceInSol = await WalletHandler.getBalance(pubAdd);

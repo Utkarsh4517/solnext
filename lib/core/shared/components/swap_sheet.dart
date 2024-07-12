@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
+import 'package:solnext/core/utils/jupiter.dart';
+import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/tracker.dart';
 
 class SwapSheet extends StatefulWidget {
@@ -21,7 +23,11 @@ class _SwapSheetState extends State<SwapSheet> {
   String _priceOfSolInUsd = '';
   String _priceInUsdc = '';
   String _priceOfUsdcInUsd = '';
+  String _publicAddress = '';
   final solController = TextEditingController();
+  final usdcController = TextEditingController();
+  Color textColor = Color(0xffB6B6B6);
+  bool isButtonEnabled = false;
 
   @override
   void initState() {
@@ -39,6 +45,7 @@ class _SwapSheetState extends State<SwapSheet> {
       _priceOfSolInUsd = balance.priceOfSolInUsd;
       _priceInUsdc = balance.priceInUsdc;
       _priceOfUsdcInUsd = balance.priceOfUsdcInUsd;
+      _publicAddress = balance.publicAddress;
     });
   }
 
@@ -84,7 +91,7 @@ class _SwapSheetState extends State<SwapSheet> {
                         ),
                         SizedBox(height: 3),
                         Text(
-                          'Balance: 10 SOL',
+                          'Balance: $_priceInSol SOL',
                           style: GoogleFonts.poppins(
                             color: Color(0xffB6B6B6),
                             fontWeight: FontWeight.w500,
@@ -97,6 +104,30 @@ class _SwapSheetState extends State<SwapSheet> {
                 ),
                 SizedBox(height: getScreenheight(context) * 0.025),
                 TextField(
+                  onChanged: (value) async {
+                    if (double.parse(solController.text) == 0.0 || solController.text.isEmpty) {
+                      setState(() {
+                        textColor = Color(0xffB6B6B6);
+                        isButtonEnabled = false;
+                        usdcController.text = '';
+                      });
+                    }
+                    if (double.parse(solController.text) > double.parse(_priceInSol)) {
+                      setState(() {
+                        textColor = Colors.red;
+                        isButtonEnabled = false;
+                        PrintLog.printLog(Jupiter.quoteResponse);
+
+                      });
+                    } else {
+                      setState(() {
+                        textColor = Color(0xffB6B6B6);
+                        isButtonEnabled = true;
+                      });
+                      final res = await Jupiter.getSolToUsdcQuote(amount: solController.text, slippage: '50');
+                      usdcController.text = res.toString();
+                    }
+                  },
                   controller: solController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -126,7 +157,7 @@ class _SwapSheetState extends State<SwapSheet> {
                     ),
                   ),
                   style: GoogleFonts.poppins(
-                    color: Color(0xffB6B6B6),
+                    color: textColor,
                     fontWeight: FontWeight.w700,
                     fontSize: getScreenWidth(context) * 0.05,
                   ),
@@ -150,9 +181,19 @@ class _SwapSheetState extends State<SwapSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'USD Coin',
-                          style: GoogleFonts.poppins(color: Color(0xffB6B6B6), fontWeight: FontWeight.bold),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'USD Coin',
+                              style: GoogleFonts.poppins(color: Color(0xffB6B6B6), fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(width: getScreenWidth(context) * 0.3),
+                            Text(
+                              'USD Coin',
+                              style: GoogleFonts.poppins(color: Color(0xffB6B6B6), fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 3),
                         Text(
@@ -170,10 +211,12 @@ class _SwapSheetState extends State<SwapSheet> {
                 SizedBox(height: getScreenheight(context) * 0.025),
                 TextField(
                   keyboardType: TextInputType.number,
+                  controller: usdcController,
+                  enabled: false,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     border: InputBorder.none,
-                    hintText: '1287.60777',
+                    hintText: '',
                     hintStyle: GoogleFonts.poppins(color: Color(0xffB6B6B6), fontWeight: FontWeight.w700, fontSize: getScreenWidth(context) * 0.05),
                     fillColor: Color(0xff161616),
                     filled: true,
@@ -200,9 +243,11 @@ class _SwapSheetState extends State<SwapSheet> {
             width: getScreenWidth(context) * 0.9,
             height: getScreenWidth(context) * 0.125,
             child: PrimaryButton(
-              onPressed: () {},
+              onPressed: () async{
+                await Jupiter.swapSolToUsdc(userPublicKey: _publicAddress);
+              },
               text: 'Confirm Swap',
-              color: Colors.black,
+              color: isButtonEnabled ? Colors.black : Colors.grey.shade500,
             ),
           )
         ],
