@@ -21,12 +21,19 @@ class _ReceiveSheetState extends State<ReceiveSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(14))),
+      decoration: BoxDecoration(gradient: gradient, borderRadius: BorderRadius.vertical(top: Radius.circular(14))),
       width: getScreenWidth(context),
       child: Column(
         children: [
           SizedBox(height: getScreenheight(context) * 0.02),
           QrImageView(
+            eyeStyle: QrEyeStyle(
+              color: Colors.white,
+              eyeShape: QrEyeShape.circle,
+            ),
+            dataModuleStyle: QrDataModuleStyle(
+              color: Colors.white
+            ),
             data: widget.address,
             version: QrVersions.auto,
             size: getScreenWidth(context) * 0.6,
@@ -36,16 +43,17 @@ class _ReceiveSheetState extends State<ReceiveSheet> {
             child: Text(
               'Scan this QR code from a different app to receive payments.',
               textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(fontSize: getScreenWidth(context) * 0.03, color: black2),
+              style: GoogleFonts.poppins(fontSize: getScreenWidth(context) * 0.03, color: Colors.white),
             ),
           ),
           SizedBox(height: getScreenheight(context) * 0.06),
           Text(
             'Or',
             textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(fontSize: getScreenWidth(context) * 0.05, color: black2),
+            style: GoogleFonts.poppins(fontSize: getScreenWidth(context) * 0.05, color: Colors.white),
           ),
           SecondaryButton(
+            color: Colors.white,
               onPressed: () async {
                 await Clipboard.setData(ClipboardData(text: widget.address));
               },
