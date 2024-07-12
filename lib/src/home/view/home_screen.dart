@@ -9,6 +9,7 @@ import 'package:solnext/core/shared/components/animated_price_text_widget.dart';
 import 'package:solnext/core/shared/components/buy_sheet.dart';
 import 'package:solnext/core/shared/components/custom_shimmer_animation.dart';
 import 'package:solnext/core/shared/components/receive_sheet.dart';
+import 'package:solnext/core/shared/components/scan_screen.dart';
 import 'package:solnext/core/shared/components/send_money.dart';
 import 'package:solnext/core/shared/components/swap_button.dart';
 import 'package:solnext/core/shared/components/swap_sheet.dart';
@@ -143,15 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        actions: [
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              margin: EdgeInsets.only(right: getScreenWidth(context) * 0.05),
-              child: SvgPicture.asset('assets/svgs/settings.svg'),
-            ),
-          ),
-        ],
+        actions: [],
       ),
       backgroundColor: Colors.black,
       // floatingActionButton: ScanAQrButton(),
@@ -210,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   TransactionButtons(
                       file: 'scan',
                       function: () {
-                        showBuySheet(context);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => QRScannerScreen()));
                       },
                       text: 'Scan'),
                 ],
