@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
@@ -13,7 +11,6 @@ import 'package:solnext/core/shared/components/scan_screen.dart';
 import 'package:solnext/core/shared/components/send_money.dart';
 import 'package:solnext/core/shared/components/swap_button.dart';
 import 'package:solnext/core/shared/components/swap_sheet.dart';
-import 'package:solnext/core/shared/components/swap_transaction_loading_sheet.dart';
 import 'package:solnext/core/utils/tracker.dart';
 import 'package:solnext/src/home/view/widgets/horizontal_token_card.dart';
 import 'package:solnext/src/home/view/widgets/transaction_buttons.dart';

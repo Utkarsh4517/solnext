@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:solnext/core/shared/components/buy_sheet.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
 import 'package:solnext/core/shared/components/send_money.dart';
 
