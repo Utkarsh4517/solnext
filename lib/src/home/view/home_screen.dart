@@ -47,6 +47,20 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  bool _areAllValuesLoaded() {
+    return _priceInSol.isNotEmpty &&
+        _priceOfSolInUsd.isNotEmpty &&
+        _priceInUsdc.isNotEmpty &&
+        _priceOfUsdcinUsd.isNotEmpty &&
+        _profitOrLoss.isNotEmpty &&
+        _profitOrLossPercentage.isNotEmpty &&
+        _profitOrLossSol.isNotEmpty &&
+        _profitOrLossUsdc.isNotEmpty &&
+        _profitOrLossSolPercentage.isNotEmpty &&
+        _profitOrLossUsdcPercentage.isNotEmpty &&
+        _publicAddress.isNotEmpty;
+  }
+
   void _loadBalance() async {
     final balance = await Tracker.fetchBalance();
     setState(() {
@@ -119,8 +133,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
   showBuySheet(BuildContext context) {
     return showModalBottomSheet(
       context: context,
@@ -166,179 +178,190 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        actions: [],
-      ),
+
       backgroundColor: Colors.black,
-      // floatingActionButton: ScanAQrButton(),
-      body: Stack(
-        children: [
-          Positioned(
-            top: getScreenheight(context) * 0.22,
-            child: Container(
-              width: getScreenWidth(context),
-              height: getScreenheight(context),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                  gradient: LinearGradient(
-                    colors: [Color(0xff191628), Color(0xff715aff)],
-                    stops: [0, 1],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  )),
-            ),
-          ),
-          Positioned(
-              bottom: getScreenheight(context) * 0.22,
-              child: Container(
+      body: _areAllValuesLoaded()
+          ? _buildHomeContent()
+          : Scaffold(
+              body: Container(
                 width: getScreenWidth(context),
-                alignment: Alignment.center,
-                child: Text(
-                  'View transaction history',
-                  style: GoogleFonts.poppins(
-                    color: purple,
-                    fontWeight: FontWeight.w500,
-                    fontSize: getScreenWidth(context) * 0.04,
+                height: getScreenheight(context),
+                decoration: BoxDecoration(gradient: gradient),
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
                   ),
                 ),
-              )),
-          Positioned(
-            top: getScreenheight(context) * 0.26,
-            left: getScreenWidth(context) * 0.05,
-            child: Container(
-              width: getScreenWidth(context) * 0.9,
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TransactionButtons(
-                      file: 'Receive',
-                      function: () {
-                        showReceiveSheet(context, _publicAddress);
-                      },
-                      text: 'Receive'),
-                  TransactionButtons(
-                      file: 'Send',
-                      function: () {
-                        // showSendSheet(context);
-                        showTokenToSendSheet(
-                          context,
-                          HorizontalTokenCard(
-                            priceInUsd: _priceOfSolInUsd,
-                            price: _priceInSol,
-                            changeInPriceInUsd: _profitOrLossSol,
-                            tokenName: 'SOL',
-                            tokenCurrencyName: 'Solana',
-                            imgPath: 'SOLANA',
-                          ),
-                          HorizontalTokenCard(
-                            priceInUsd: _priceOfUsdcinUsd,
-                            price: _priceInUsdc,
-                            changeInPriceInUsd: _profitOrLossUsdc,
-                            tokenName: 'USDC',
-                            tokenCurrencyName: 'USD Coin',
-                            imgPath: 'usdCoin',
-                          ),
-                        );
-                      },
-                      text: 'Send'),
-                  TransactionButtons(
-                      file: 'scan',
-                      function: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => QRScannerScreen()));
-                      },
-                      text: 'Scan'),
-                ],
               ),
             ),
+    );
+  }
+
+  Widget _buildHomeContent() {
+    return Stack(
+      children: [
+        Positioned(
+          top: getScreenheight(context) * 0.33,
+          child: Container(
+            width: getScreenWidth(context),
+            height: getScreenheight(context),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                gradient: LinearGradient(
+                  colors: [Color(0xff191628), Color(0xff715aff)],
+                  stops: [0, 1],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                )),
           ),
-          // if (double.parse(_priceInSol) > 0)
-          Positioned(
-            top: getScreenheight(context) * 0.38,
-            child: HorizontalTokenCard(
-              priceInUsd: _priceOfSolInUsd,
-              price: _priceInSol,
-              changeInPriceInUsd: _profitOrLossSol,
-              tokenName: 'SOL',
-              tokenCurrencyName: 'Solana',
-              imgPath: 'SOLANA',
+        ),
+        Positioned(
+            bottom: getScreenheight(context) * 0.22,
+            child: Container(
+              width: getScreenWidth(context),
+              alignment: Alignment.center,
+              child: Text(
+                'View transaction history',
+                style: GoogleFonts.poppins(
+                  color: purple,
+                  fontWeight: FontWeight.w500,
+                  fontSize: getScreenWidth(context) * 0.04,
+                ),
+              ),
+            )),
+        Positioned(
+          top: getScreenheight(context) * 0.36,
+          left: getScreenWidth(context) * 0.05,
+          child: Container(
+            width: getScreenWidth(context) * 0.9,
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TransactionButtons(
+                    file: 'Receive',
+                    function: () {
+                      showReceiveSheet(context, _publicAddress);
+                    },
+                    text: 'Receive'),
+                TransactionButtons(
+                    file: 'Send',
+                    function: () {
+                      showTokenToSendSheet(
+                        context,
+                        HorizontalTokenCard(
+                          priceInUsd: _priceOfSolInUsd,
+                          price: _priceInSol,
+                          changeInPriceInUsd: _profitOrLossSol,
+                          tokenName: 'SOL',
+                          tokenCurrencyName: 'Solana',
+                          imgPath: 'SOLANA',
+                        ),
+                        HorizontalTokenCard(
+                          priceInUsd: _priceOfUsdcinUsd,
+                          price: _priceInUsdc,
+                          changeInPriceInUsd: _profitOrLossUsdc,
+                          tokenName: 'USDC',
+                          tokenCurrencyName: 'USD Coin',
+                          imgPath: 'usdCoin',
+                        ),
+                      );
+                    },
+                    text: 'Send'),
+                TransactionButtons(
+                    file: 'scan',
+                    function: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => QRScannerScreen()));
+                    },
+                    text: 'Scan'),
+              ],
             ),
           ),
-          // if (double.parse(_priceInUsdc) > 0)
-          Positioned(
-            top: getScreenheight(context) * 0.5,
-            child: HorizontalTokenCard(
-              priceInUsd: _priceOfUsdcinUsd,
-              price: _priceInUsdc,
-              changeInPriceInUsd: _profitOrLossUsdc,
-              tokenName: 'USDC',
-              tokenCurrencyName: 'USD Coin',
-              imgPath: 'usdCoin',
-            ),
+        ),
+        Positioned(
+          top: getScreenheight(context) * 0.48,
+          child: HorizontalTokenCard(
+            priceInUsd: _priceOfSolInUsd,
+            price: _priceInSol,
+            changeInPriceInUsd: _profitOrLossSol,
+            tokenName: 'SOL',
+            tokenCurrencyName: 'Solana',
+            imgPath: 'SOLANA',
           ),
-          Positioned(
-            top: getScreenheight(context) * 0.01,
-            child: FutureBuilder<String>(
-              future: _currentBalanceInUSDC,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting && _isFirstLoad) {
-                  return SizedBox(
-                    width: getScreenWidth(context),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+        ),
+        Positioned(
+          top: getScreenheight(context) * 0.6,
+          child: HorizontalTokenCard(
+            priceInUsd: _priceOfUsdcinUsd,
+            price: _priceInUsdc,
+            changeInPriceInUsd: _profitOrLossUsdc,
+            tokenName: 'USDC',
+            tokenCurrencyName: 'USD Coin',
+            imgPath: 'usdCoin',
+          ),
+        ),
+        Positioned(
+          top: getScreenheight(context) * 0.01,
+          child: FutureBuilder<String>(
+            future: _currentBalanceInUSDC,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting && _isFirstLoad) {
+                return SizedBox(
+                  width: getScreenWidth(context),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomShimmerAnimation(),
+                    ],
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Container();
+              } else if (snapshot.hasData) {
+                _isFirstLoad = false;
+                final balanceInUsd = snapshot.data!;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: getScreenheight(context) * 0.1),
+                    AnimatedPriceTextWidget(balanceInUsd: balanceInUsd),
+                    Row(
                       children: [
-                        CustomShimmerAnimation(),
+                        Text(
+                          '${(double.tryParse(_profitOrLoss) ?? 0) < 0 ? "-\$${((double.tryParse(_profitOrLoss) ?? 0) * -1).toStringAsFixed(2)}" : "+\$${(double.tryParse(_profitOrLoss) ?? 0).toStringAsFixed(2)}"}',
+                          style: GoogleFonts.poppins(fontWeight: FontWeight.w700, color: (double.tryParse(_profitOrLoss) ?? 0) > 0 ? green : red, fontSize: getScreenWidth(context) * 0.06),
+                        ),
+                        SizedBox(width: getScreenWidth(context) * 0.03),
+                        Container(
+                          alignment: Alignment.center,
+                          width: getScreenWidth(context) * 0.16,
+                          padding: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.02),
+                          decoration: BoxDecoration(color: (double.tryParse(_profitOrLossPercentage) ?? 0) > 0 ? greenAccent : redAccent, borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                            '${(double.tryParse(_profitOrLossPercentage) ?? 0) < 0 ? "${((double.tryParse(_profitOrLossPercentage) ?? 0) * -1).toStringAsFixed(2)}%" : "${(double.tryParse(_profitOrLossPercentage) ?? 0).toStringAsFixed(2)}%"}',
+                            style: GoogleFonts.poppins(fontWeight: FontWeight.w700, color: (double.tryParse(_profitOrLossPercentage) ?? 0) > 0 ? green : red, fontSize: getScreenWidth(context) * 0.03),
+                          ),
+                        ),
                       ],
                     ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Container();
-                } else if (snapshot.hasData) {
-                  _isFirstLoad = false;
-                  final balanceInUsd = snapshot.data!;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      AnimatedPriceTextWidget(balanceInUsd: balanceInUsd),
-                      Row(
-                        children: [
-                          Text(
-                            '${double.parse(_profitOrLoss) < 0 ? "-\$${(double.parse(_profitOrLoss) * -1)}" : "+\$${_profitOrLoss}"}',
-                            style: GoogleFonts.poppins(fontWeight: FontWeight.w700, color: double.parse(_profitOrLoss) > 0 ? green : red, fontSize: getScreenWidth(context) * 0.06),
-                          ),
-                          SizedBox(width: getScreenWidth(context) * 0.03),
-                          Container(
-                            alignment: Alignment.center,
-                            width: getScreenWidth(context) * 0.16,
-                            padding: EdgeInsets.symmetric(vertical: getScreenWidth(context) * 0.02),
-                            decoration: BoxDecoration(color: double.parse(_profitOrLossPercentage) > 0 ? greenAccent : redAccent, borderRadius: BorderRadius.circular(10)),
-                            child: Text(
-                              '${double.parse(_profitOrLossPercentage) < 0 ? "${(double.parse(_profitOrLossPercentage) * -1)}%" : "${_profitOrLossPercentage}%"}',
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.w700, color: double.parse(_profitOrLossPercentage) > 0 ? green : red, fontSize: getScreenWidth(context) * 0.03),
-                            ),
-                          ),
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        showSwapSheet(context);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: getScreenWidth(context) * 0.3, top: getScreenheight(context) * 0.01),
+                        alignment: Alignment.center,
+                        child: SwapButton(),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          showSwapSheet(context);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(left: getScreenWidth(context) * 0.3, top: getScreenheight(context) * 0.01),
-                          alignment: Alignment.center,
-                          child: SwapButton(),
-                        ),
-                      )
-                    ],
-                  );
-                }
-                return Container();
-              },
-            ),
+                    )
+                  ],
+                );
+              }
+              return Container();
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
