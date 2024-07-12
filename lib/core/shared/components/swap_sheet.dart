@@ -251,6 +251,7 @@ class _SwapSheetState extends State<SwapSheet> {
               onPressed: () async {
                 Navigator.pop(context);
                 return showModalBottomSheet(
+                  backgroundColor: Colors.transparent,
                   context: context,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
@@ -258,7 +259,16 @@ class _SwapSheetState extends State<SwapSheet> {
                     ),
                   ),
                   builder: (context) {
-                    return SwapTransactionLoadingSheet(userPublicKey: _publicAddress);
+                    return Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(25.0),
+                          bottom: Radius.circular(25.0),
+                        ),
+                        child: SwapTransactionLoadingSheet(userPublicKey: _publicAddress),
+                      ),
+                    );
                   },
                 );
               },
