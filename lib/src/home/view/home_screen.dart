@@ -7,6 +7,7 @@ import 'package:solnext/core/shared/components/animated_price_text_widget.dart';
 import 'package:solnext/core/shared/components/buy_sheet.dart';
 import 'package:solnext/core/shared/components/custom_shimmer_animation.dart';
 import 'package:solnext/core/shared/components/receive_sheet.dart';
+import 'package:solnext/core/shared/components/reveal_keypairs_sheet.dart';
 import 'package:solnext/core/shared/components/scan_screen.dart';
 import 'package:solnext/core/shared/components/swap_button.dart';
 import 'package:solnext/core/shared/components/swap_sheet.dart';
@@ -175,6 +176,31 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+    showRevealKeypairSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 20, left: 10, right: 10),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(25.0),
+              bottom: Radius.circular(25.0),
+            ),
+            child: RevealKeypairsSheet(),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -217,15 +243,20 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Positioned(
             bottom: getScreenheight(context) * 0.22,
-            child: Container(
-              width: getScreenWidth(context),
-              alignment: Alignment.center,
-              child: Text(
-                'View transaction history',
-                style: GoogleFonts.poppins(
-                  color: purple,
-                  fontWeight: FontWeight.w500,
-                  fontSize: getScreenWidth(context) * 0.04,
+            child: GestureDetector(
+              onTap: () {
+                showRevealKeypairSheet(context);
+              },
+              child: Container(
+                width: getScreenWidth(context),
+                alignment: Alignment.center,
+                child: Text(
+                  'View Keypairs',
+                  style: GoogleFonts.poppins(
+                    color: purple,
+                    fontWeight: FontWeight.w500,
+                    fontSize: getScreenWidth(context) * 0.04,
+                  ),
                 ),
               ),
             )),
