@@ -2,6 +2,7 @@
 
 import 'package:solana/solana.dart';
 import 'package:solnext/core/constants/dimensions.dart';
+import 'package:solnext/core/shared/components/import_wallet_sheet.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
 import 'package:solnext/core/shared/components/secondary_button.dart';
 import 'package:solnext/src/onBoarding/view/screens/intro_page2.dart';
@@ -22,8 +23,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   bool onLastPage = false;
   int currentIndex = 0;
   final SolanaClient client = SolanaClient(rpcUrl: Uri(), websocketUrl: Uri(), timeout: const Duration(seconds: 30));
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +68,28 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 child: PrimaryButton(
                     onPressed: () {
                       // _controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(25.0),
+                          ),
+                        ),
+                        builder: (context) {
+                          return Padding(
+                            padding:EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 10, left: 10, right: 10),
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(25.0),
+                                bottom: Radius.circular(25.0),
+                              ),
+                              child: ImportWalletSheet(),
+                            ),
+                          );
+                        },
+                      );
                     },
                     text: 'Import a wallet'),
               ),
@@ -82,7 +103,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 height: getScreenheight(context) * 0.055,
                 child: SecondaryButton(
                     onPressed: () async {
-                        _controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                      _controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
                       // PrintLog.printLog(pubkey);
                       // PrintLog.printLog(privateKey);
                     },

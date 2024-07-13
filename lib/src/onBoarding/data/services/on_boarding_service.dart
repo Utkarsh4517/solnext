@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solnext/core/shared/nav_bar.dart';
+import 'package:solnext/src/home/view/home_screen.dart';
 
 class OnBoardingService {
   static void completeOnboarding(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('hasSeenOnboarding', true);
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const NavigationScreen()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
   }
 }

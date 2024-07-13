@@ -9,4 +9,10 @@ class CreateWallet {
     final Ed25519HDKeyPair keypair = await Ed25519HDKeyPair.fromMnemonic(mnemonic);
     return (keypair, mnemonic);
   }
+
+  static Future<Ed25519HDKeyPair> generateWalletFromMnemonic(String mnemonic) async {
+    final Ed25519HDKeyPair keypair = await Ed25519HDKeyPair.fromMnemonic(mnemonic);
+    await WalletService.saveMnemonics(mnemonics: mnemonic);
+    return keypair;
+  }
 }
