@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/secondary_button.dart';
+import 'package:solnext/core/utils/wallet_service.dart';
 import 'package:solnext/src/onBoarding/data/services/create_wallet.dart';
 import 'package:solnext/src/onBoarding/view/screens/all_done_scree.dart';
 
@@ -15,7 +16,7 @@ class ImportWalletSheet extends StatefulWidget {
 }
 
 class _ImportWalletSheetState extends State<ImportWalletSheet> {
-  final mnemonicsController = TextEditingController();
+  final privateKeyController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +29,7 @@ class _ImportWalletSheetState extends State<ImportWalletSheet> {
           SizedBox(
             width: getScreenWidth(context) * 0.6,
             child: Text(
-              'Enter your secret recovery phrase to import your wallet.',
+              'Enter your PRIVATE key to import your wallet.',
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(fontSize: getScreenWidth(context) * 0.03, color: Colors.black),
             ),
@@ -39,12 +40,12 @@ class _ImportWalletSheetState extends State<ImportWalletSheet> {
             height: getScreenheight(context) * 0.2,
             child: Expanded(
               child: TextField(
-                controller: mnemonicsController,
+                controller: privateKeyController,
                 maxLines: null,
                 expands: true,
                 textAlignVertical: TextAlignVertical.top,
                 decoration: InputDecoration(
-                  hintText: 'Secret Recovery Phrase',
+                  hintText: 'Enter your private key',
                   hintStyle: GoogleFonts.poppins(fontSize: getScreenWidth(context) * 0.05, color: Colors.black),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -64,7 +65,10 @@ class _ImportWalletSheetState extends State<ImportWalletSheet> {
           ),
           SecondaryButton(
               onPressed: () async {
-                await CreateWallet.generateWalletFromMnemonic(mnemonicsController.text);
+                final res = await CreateWallet.generateWalletFromPrivateKey(privateKeyController.text);
+                await WalletService.savePublicKey(publicKey: res.publicKey.toString());
+                final privateKey = await CreateWallet.getPrivateKey(res);
+                await WalletService.savePrivateKey(privateKey: privateKey);
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AllDoneScreen()));
               },
               text: 'Import Wallet'),

@@ -28,11 +28,13 @@ class _IntroPage3State extends State<IntroPage3> {
 
   createWallet() async {
     final (keypair, mnemonic) = await CreateWallet.createNewWallet();
+    final privateKey = await CreateWallet.getPrivateKey(keypair);
     setState(() {
       keyPairGenerated = keypair;
       mnemonicGenerated = mnemonic;
     });
     WalletService.savePublicKey(publicKey: keypair.publicKey.toString());
+    WalletService.savePrivateKey(privateKey: privateKey);
   }
 
   @override

@@ -6,10 +6,20 @@ class WalletService {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('publicKey', publicKey);
   }
+    static Future<void> savePrivateKey({required String privateKey}) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('privateKey', privateKey);
+  }
 
   static Future<String> getPublicKey() async {
     final prefs = await SharedPreferences.getInstance();
     String publicKey = prefs.getString('publicKey')!;
+    return publicKey;
+  }
+
+    static Future<String> getPrivateKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    String publicKey = prefs.getString('privateKey')!;
     return publicKey;
   }
 

@@ -19,16 +19,16 @@ class _RevealKeypairsSheetState extends State<RevealKeypairsSheet> {
   @override
   void initState() {
     super.initState();
-    fetchMnemonic();
+    fetchPrivateKey();
   }
 
-  String mnemonics = '';
+  String privateKey = '';
   bool isRevealed = false;
 
-  fetchMnemonic() async {
-    final res = await WalletService.getMnemonics();
+  fetchPrivateKey() async {
+    final res = await WalletService.getPrivateKey();
     setState(() {
-      mnemonics = res;
+      privateKey = res;
     });
   }
 
@@ -47,7 +47,7 @@ class _RevealKeypairsSheetState extends State<RevealKeypairsSheet> {
           SizedBox(
             width: getScreenWidth(context) * 0.75,
             child: Text(
-              'These 12 words mnemonics are the key to your wallet. Keep them safe and secure. Do not share them with anyone.',
+              'This is your private key. Keep it safe and secure. Do not share it with anyone.',
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 fontSize: getScreenWidth(context) * 0.03,
@@ -70,7 +70,7 @@ class _RevealKeypairsSheetState extends State<RevealKeypairsSheet> {
             ),
             child: isRevealed
                 ? Text(
-                    mnemonics,
+                    privateKey,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       fontSize: getScreenWidth(context) * 0.04,
@@ -84,16 +84,16 @@ class _RevealKeypairsSheetState extends State<RevealKeypairsSheet> {
                         isRevealed = true;
                       });
                     },
-                    text: 'Reveal Mnemonics',
+                    text: 'Reveal Private Key',
                     color: Colors.white,
                   ),
           ),
           if (isRevealed)
             SecondaryButton(
               onPressed: () {
-                Clipboard.setData(ClipboardData(text: mnemonics));
+                Clipboard.setData(ClipboardData(text: privateKey));
               },
-              text: 'Copy Mnemonics',
+              text: 'Copy Private Key',
               color: Colors.white,
             )
         ],
