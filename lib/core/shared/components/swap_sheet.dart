@@ -6,7 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:solnext/core/constants/colors.dart';
 import 'package:solnext/core/constants/dimensions.dart';
 import 'package:solnext/core/shared/components/primary_button.dart';
+import 'package:solnext/core/shared/components/secondary_button.dart';
 import 'package:solnext/core/shared/components/swap_transaction_loading_sheet.dart';
+import 'package:solnext/core/shared/components/view_options_sheet.dart';
 import 'package:solnext/core/utils/jupiter.dart';
 import 'package:solnext/core/utils/print_log.dart';
 import 'package:solnext/core/utils/tracker.dart';
@@ -29,6 +31,7 @@ class _SwapSheetState extends State<SwapSheet> {
   final usdcController = TextEditingController();
   Color textColor = Color(0xffB6B6B6);
   bool isButtonEnabled = false;
+  double slippage = 0.5;
 
   @override
   void initState() {
@@ -61,13 +64,14 @@ class _SwapSheetState extends State<SwapSheet> {
     return Container(
       width: getScreenWidth(context),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          gradient: LinearGradient(
-            colors: [Color(0xff191628), Color(0xff715aff)],
-            stops: [0, 1],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          )),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        gradient: LinearGradient(
+          colors: [Color(0xff191628), Color(0xff715aff)],
+          stops: [0, 1],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        )
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -124,7 +128,10 @@ class _SwapSheetState extends State<SwapSheet> {
                         textColor = Color(0xffB6B6B6);
                         isButtonEnabled = true;
                       });
-                      final res = await Jupiter.getSolToUsdcQuote(amount: solController.text, slippage: '50');
+                      final res = await Jupiter.getSolToUsdcQuote(
+                        amount: solController.text,
+                        slippage: (slippage * 100).toStringAsFixed(0)
+                      );
                       usdcController.text = res.toString();
                     }
                   },
@@ -135,7 +142,10 @@ class _SwapSheetState extends State<SwapSheet> {
                     suffixIcon: GestureDetector(
                       onTap: () async {
                         solController.text = _priceInSol;
-                        final res = await Jupiter.getSolToUsdcQuote(amount: solController.text, slippage: '50');
+                        final res = await Jupiter.getSolToUsdcQuote(
+                          amount: solController.text,
+                          slippage: (slippage * 100).toStringAsFixed(0)
+                        );
                         setState(() {
                           usdcController.text = res.toString();
                           isButtonEnabled = true;
@@ -243,6 +253,52 @@ class _SwapSheetState extends State<SwapSheet> {
                 ),
               ],
             ),
+          ),
+          SecondaryButton(
+            onPressed: () async {
+              final result = await showModalBottomSheet<double>(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(25.0),
+                  ),
+                ),
+                builder: (context) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                      left: 10,
+                      right: 10
+                    ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(25.0),
+                        bottom: Radius.circular(25.0),
+                      ),
+                      child: ViewOptionsSheet(initialSlippage: slippage),
+                    ),
+                  );
+                },
+              );
+              if (result != null) {
+                setState(() {
+                  slippage = result;
+                });
+                // Use the new slippage value to update the quote
+                if (solController.text.isNotEmpty) {
+                  final res = await Jupiter.getSolToUsdcQuote(
+                    amount: solController.text,
+                    slippage: (slippage * 100).toStringAsFixed(0)
+                  );
+                  setState(() {
+                    usdcController.text = res.toString();
+                  });
+                }
+              }
+            },
+            text: 'View Options'
           ),
           SizedBox(
             width: getScreenWidth(context) * 0.85,
