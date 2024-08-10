@@ -286,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           changeInPriceInUsd: _profitOrLossSol,
                           tokenName: 'SOL',
                           tokenCurrencyName: 'Solana',
-                          imgPath: 'SOLANA',
+                          imgPath: 'solana',
                         ),
                         HorizontalTokenCard(
                           priceInUsd: _priceOfUsdcinUsd,
@@ -317,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
             changeInPriceInUsd: _profitOrLossSol,
             tokenName: 'SOL',
             tokenCurrencyName: 'Solana',
-            imgPath: 'SOLANA',
+            imgPath: 'solana',
           ),
         ),
         Positioned(
