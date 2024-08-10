@@ -36,33 +36,32 @@ class _ImportWalletSheetState extends State<ImportWalletSheet> {
           ),
           SizedBox(height: getScreenheight(context) * 0.06),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05),
-            height: getScreenheight(context) * 0.2,
-            child: Expanded(
-              child: TextField(
-                controller: privateKeyController,
-                maxLines: null,
-                expands: true,
-                textAlignVertical: TextAlignVertical.top,
-                decoration: InputDecoration(
-                  hintText: 'Enter your private key',
-                  hintStyle: GoogleFonts.poppins(fontSize: getScreenWidth(context) * 0.05, color: Colors.black),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                ),
-              ),
-            ),
-          ),
+  margin: EdgeInsets.symmetric(horizontal: getScreenWidth(context) * 0.05),
+  height: getScreenheight(context) * 0.2,
+  child: TextField(
+    controller: privateKeyController,
+    maxLines: null,
+    expands: true,
+    textAlignVertical: TextAlignVertical.top,
+    decoration: InputDecoration(
+      hintText: 'Enter your private key',
+      hintStyle: GoogleFonts.poppins(fontSize: getScreenWidth(context) * 0.05, color: Colors.black),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.black),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.black),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.black),
+      ),
+    ),
+  ),
+),
+
           SecondaryButton(
               onPressed: () async {
                 final res = await CreateWallet.generateWalletFromPrivateKey(privateKeyController.text);
